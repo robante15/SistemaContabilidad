@@ -8,6 +8,7 @@ package GUI;
 import Entidades.Usuario;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.util.ArrayList;
 
 /**
  *
@@ -61,6 +62,11 @@ public class RegistroUsuario extends javax.swing.JFrame {
         txt_codEmpleado = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                apertura(evt);
+            }
+        });
 
         lbl_title.setText("Nuevo Usuario");
 
@@ -81,7 +87,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
                 .addGap(34, 34, 34))
         );
 
-        btn_registro.setText("Aceptar");
+        btn_registro.setText("Registrar");
         btn_registro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_registroActionPerformed(evt);
@@ -111,9 +117,12 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         lbl_rol.setText("Rol");
 
-        cbox_empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empresa XYZ", "Empresa Tapatio", "Empresa Tomeko", "Empresa ABC" }));
-
         btn_agregarEmpresa.setText("+");
+        btn_agregarEmpresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregarEmpresaActionPerformed(evt);
+            }
+        });
 
         cbox_rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empresario", "Contador", "Auditor" }));
 
@@ -145,13 +154,13 @@ public class RegistroUsuario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_contrasena)
-                            .addComponent(txt_nombres)
                             .addComponent(txt_apellidos)
                             .addComponent(txt_usuario)
                             .addComponent(cbox_empresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txt_correo)
                             .addComponent(txt_telefono)
-                            .addComponent(cbox_rol, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbox_rol, 0, 190, Short.MAX_VALUE)
+                            .addComponent(txt_nombres)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lbl_codEmpleado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -251,13 +260,27 @@ public class RegistroUsuario extends javax.swing.JFrame {
         telefono = Integer.valueOf(this.txt_telefono.getText());
         codEmpleado = Integer.valueOf(this.txt_codEmpleado.getText());
         rol = this.cbox_empresa.getItemAt(this.cbox_rol.getSelectedIndex());
-        
-        
+
         Usuario usuarioOBJ = factory.usuario(nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
-        
+
         BaseDatos baseDatos = factory.baseDatos();
         baseDatos.registrarUsuario(usuarioOBJ);
     }//GEN-LAST:event_btn_registroActionPerformed
+
+    private void btn_agregarEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarEmpresaActionPerformed
+        RegistroEmpresa registroEmpresa = factory.registroEmpresa();
+        registroEmpresa.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_agregarEmpresaActionPerformed
+
+    private void apertura(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_apertura
+        BaseDatos base = factory.baseDatos();
+        ArrayList<String> tipoGasto = base.listarEmpresas();
+        this.cbox_empresa.removeAllItems();
+        for(int i=0; i<tipoGasto.size(); i++){
+             this.cbox_empresa.addItem(tipoGasto.get(i));
+        }
+    }//GEN-LAST:event_apertura
 
     /**
      * @param args the command line arguments

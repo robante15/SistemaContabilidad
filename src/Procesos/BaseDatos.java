@@ -17,6 +17,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import Entidades.*;
 import Factory.Factory;
+import java.util.ArrayList;
 
 /**
  *
@@ -136,7 +137,7 @@ public class BaseDatos {
     }
 
     //Crear tabla usuario
-    public void crearTabla(String nombreTabla) throws SQLException {
+    public void crearTablaUsuario(String nombreTabla) throws SQLException {
         try {
             Statement sentencia = null;
             sentencia = connect.createStatement();
@@ -160,11 +161,110 @@ public class BaseDatos {
         }
     }
 
+    public void crearTablaEmpresas(String nombreTabla) throws SQLException {
+        try {
+            Statement sentencia = null;
+            sentencia = connect.createStatement();
+            String sql = "CREATE TABLE " + nombreTabla + " (\n"
+                    + "    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n"
+                    + "    nombre_empresa TEXT NOT NULL,\n"
+                    + "    forma_juridica TEXT NOT NULL,\n"
+                    + "    fecha_constitucion TEXT  NOT NULL,\n"
+                    + "    direccion TEXT NOT NULL,\n"
+                    + "    correo TEXT NOT NULL,\n"
+                    + "    registro_legal TEXT NOT NULL,\n"
+                    + "    telefono INTEGER NOT NULL,\n"
+                    + "    dueno TEXT NOT NULL,\n"
+                    + "    sector_actividad TEXT NOT NULL,\n"
+                    + "    resumen_negocio TEXT NOT NULL);";
+            sentencia.execute(sql);
+            sentencia.close();
+            connect.close();
+            System.out.println("Exito al crear la tabla");
+        } catch (Exception e) {
+            System.out.println("Error al crear la tabla o que ya estaba creada");
+        }
+    }
+
+    public ArrayList<String> listarEmpresas() {
+        factory = new Factory();
+        ArrayList<String> listaEmpresas = new ArrayList<String>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM empresas ORDER BY nombre_empresa ASC";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                String nombre_empresa = rs.getString("nombre_empresa");
+
+                listaEmpresas.add(nombre_empresa);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaEmpresas;
+    }
+
     //Metodos de insersion a la Base de Datos
+    public void registrarEmpresa(Empresa empresa) {
+
+        try {
+            this.crearTablaEmpresas("empresas");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "INSERT INTO empresas (nombre_empresa , forma_juridica , fecha_constitucion , direccion , correo , registro_legal , telefono, dueno , sector_actividad, resumen_negocio ) VALUES(?,?,?,?,?,?,?,?,?,?)";
+            st = connect.prepareStatement(SQLQuery);
+
+            st.setString(1, empresa.getNomre_empresa());
+            st.setString(2, empresa.getForma_juridica());
+            st.setString(3, empresa.getFecha_constitucion());
+            st.setString(4, empresa.getDireccion());
+            st.setString(5, empresa.getCorreo());
+            st.setString(6, empresa.getRegistro_legal());
+            st.setInt(7, empresa.getTelefono());
+            st.setString(8, empresa.getDueno());
+            st.setString(9, empresa.getSector_actividad());
+            st.setString(10, empresa.getResumen_negocio());
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Nuevo registro agregado correctamente");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     public void registrarUsuario(Usuario usuario) {
 
         try {
-            this.crearTabla("usuarios");
+            this.crearTablaUsuario("usuarios");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
