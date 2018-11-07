@@ -5,17 +5,25 @@
  */
 package GUI;
 
+import Entidades.Usuario;
+import Factory.Factory;
+import Procesos.BaseDatos;
+
 /**
  *
  * @author roban
  */
-public class Registro extends javax.swing.JFrame {
+public class RegistroUsuario extends javax.swing.JFrame {
+
+    private static Factory factory;
 
     /**
      * Creates new form Registro
      */
-    public Registro() {
+    public RegistroUsuario() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        factory = new Factory();
     }
 
     /**
@@ -27,7 +35,6 @@ public class Registro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        frame_registroEmpresa = new javax.swing.JFrame();
         jPanel1 = new javax.swing.JPanel();
         lbl_title = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -50,17 +57,8 @@ public class Registro extends javax.swing.JFrame {
         txt_correo = new javax.swing.JTextField();
         txt_telefono = new javax.swing.JTextField();
         cbox_rol = new javax.swing.JComboBox<>();
-
-        javax.swing.GroupLayout frame_registroEmpresaLayout = new javax.swing.GroupLayout(frame_registroEmpresa.getContentPane());
-        frame_registroEmpresa.getContentPane().setLayout(frame_registroEmpresaLayout);
-        frame_registroEmpresaLayout.setHorizontalGroup(
-            frame_registroEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        frame_registroEmpresaLayout.setVerticalGroup(
-            frame_registroEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        lbl_codEmpleado = new javax.swing.JLabel();
+        txt_codEmpleado = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,6 +82,11 @@ public class Registro extends javax.swing.JFrame {
         );
 
         btn_registro.setText("Aceptar");
+        btn_registro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_registroActionPerformed(evt);
+            }
+        });
 
         btn_cancelar.setText("Cancelar");
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -108,46 +111,54 @@ public class Registro extends javax.swing.JFrame {
 
         lbl_rol.setText("Rol");
 
-        cbox_empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbox_empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empresa XYZ", "Empresa Tapatio", "Empresa Tomeko", "Empresa ABC" }));
 
         btn_agregarEmpresa.setText("+");
 
         cbox_rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empresario", "Contador", "Auditor" }));
 
+        lbl_codEmpleado.setText("Cod. de Empleado");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(65, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_contrasena)
-                    .addComponent(lbl_nombres)
-                    .addComponent(lbl_apellidos)
-                    .addComponent(lbl_empresa)
-                    .addComponent(lbl_usuario)
-                    .addComponent(lbl_correo)
-                    .addComponent(lbl_telefono)
-                    .addComponent(lbl_rol))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_contrasena)
-                    .addComponent(txt_nombres)
-                    .addComponent(txt_apellidos)
-                    .addComponent(txt_usuario)
-                    .addComponent(cbox_empresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txt_correo)
-                    .addComponent(txt_telefono)
-                    .addComponent(cbox_rol, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btn_agregarEmpresa)
-                .addGap(37, 37, 37))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(120, 120, 120)
                 .addComponent(btn_registro)
                 .addGap(36, 36, 36)
                 .addComponent(btn_cancelar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(65, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_contrasena)
+                            .addComponent(lbl_nombres)
+                            .addComponent(lbl_apellidos)
+                            .addComponent(lbl_empresa)
+                            .addComponent(lbl_usuario)
+                            .addComponent(lbl_correo)
+                            .addComponent(lbl_telefono)
+                            .addComponent(lbl_rol))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_contrasena)
+                            .addComponent(txt_nombres)
+                            .addComponent(txt_apellidos)
+                            .addComponent(txt_usuario)
+                            .addComponent(cbox_empresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txt_correo)
+                            .addComponent(txt_telefono)
+                            .addComponent(cbox_rol, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbl_codEmpleado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_codEmpleado)))
+                .addGap(18, 18, 18)
+                .addComponent(btn_agregarEmpresa)
+                .addGap(37, 37, 37))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,9 +194,13 @@ public class Registro extends javax.swing.JFrame {
                     .addComponent(txt_telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_codEmpleado)
+                    .addComponent(txt_codEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_rol)
                     .addComponent(cbox_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_registro)
                     .addComponent(btn_cancelar))
@@ -211,8 +226,38 @@ public class Registro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
+        Login login = factory.login();
+        login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_cancelarActionPerformed
+
+    private void btn_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registroActionPerformed
+        String nombres;
+        String apellidos;
+        String empresa;
+        String usuario;
+        String contrasena;
+        String correo;
+        int telefono;
+        int codEmpleado;
+        String rol;
+
+        nombres = this.txt_nombres.getText();
+        apellidos = this.txt_apellidos.getText();
+        empresa = this.cbox_empresa.getItemAt(this.cbox_empresa.getSelectedIndex());
+        usuario = this.txt_usuario.getText();
+        contrasena = String.valueOf(this.txt_contrasena.getPassword());
+        correo = this.txt_correo.getText();
+        telefono = Integer.valueOf(this.txt_telefono.getText());
+        codEmpleado = Integer.valueOf(this.txt_codEmpleado.getText());
+        rol = this.cbox_empresa.getItemAt(this.cbox_rol.getSelectedIndex());
+        
+        
+        Usuario usuarioOBJ = factory.usuario(nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
+        
+        BaseDatos baseDatos = factory.baseDatos();
+        baseDatos.registrarUsuario(usuarioOBJ);
+    }//GEN-LAST:event_btn_registroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,23 +273,32 @@ public class Registro extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Registro().setVisible(true);
+                new RegistroUsuario().setVisible(true);
             }
         });
     }
@@ -255,10 +309,10 @@ public class Registro extends javax.swing.JFrame {
     private javax.swing.JButton btn_registro;
     private javax.swing.JComboBox<String> cbox_empresa;
     private javax.swing.JComboBox<String> cbox_rol;
-    private javax.swing.JFrame frame_registroEmpresa;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lbl_apellidos;
+    private javax.swing.JLabel lbl_codEmpleado;
     private javax.swing.JLabel lbl_contrasena;
     private javax.swing.JLabel lbl_correo;
     private javax.swing.JLabel lbl_empresa;
@@ -268,6 +322,7 @@ public class Registro extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_title;
     private javax.swing.JLabel lbl_usuario;
     private javax.swing.JTextField txt_apellidos;
+    private javax.swing.JTextField txt_codEmpleado;
     private javax.swing.JPasswordField txt_contrasena;
     private javax.swing.JTextField txt_correo;
     private javax.swing.JTextField txt_nombres;

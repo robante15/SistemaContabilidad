@@ -14,7 +14,7 @@ import Procesos.BaseDatos;
  * @author roban
  */
 public class Login extends javax.swing.JFrame {
-    
+
     private static Factory factory;
 
     /**
@@ -95,6 +95,11 @@ public class Login extends javax.swing.JFrame {
 
         lbl_registrarse.setText("Registrarse");
         lbl_registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbl_registrarse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbl_registrarseMouseClicked(evt);
+            }
+        });
         jpanel_content.add(lbl_registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -120,13 +125,13 @@ public class Login extends javax.swing.JFrame {
         String contrasena = this.txt_contrasena.getText();
         BaseDatos baseDatos = factory.baseDatos();
         boolean aprovada = baseDatos.ValidarLogin(user, contrasena);
-        
+
         if (aprovada == true) {
             System.out.print("Ha sido validado el inicio de sesión");
             Principal principal = factory.principal();
             principal.setVisible(true);
-            this.setVisible(false);
-        }else{
+            this.dispose();
+        } else {
             System.out.print(aprovada + "No se ha sido validado el inicio de sesión");
         }
     }//GEN-LAST:event_btn_aceptarActionPerformed
@@ -134,6 +139,12 @@ public class Login extends javax.swing.JFrame {
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btn_cancelarActionPerformed
+
+    private void lbl_registrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_registrarseMouseClicked
+        RegistroUsuario registroUsuario = factory.registroUsuario();
+        registroUsuario.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lbl_registrarseMouseClicked
 
     /**
      * @param args the command line arguments

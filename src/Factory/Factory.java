@@ -7,8 +7,7 @@ package Factory;
 import GUI.*;
 import Procesos.*;
 import Entidades.*;
-//import Entidades.*;
-//import GUI.*;
+
 /**
  *
  * @author roban
@@ -24,8 +23,17 @@ public class Factory {
         return new Principal();
     }
     
+    public RegistroUsuario registroUsuario(){
+        return new RegistroUsuario();
+    }
+    
     public Login login(){
         return new Login();
+    }
+    
+    /*----------------------ENTIDADES--------------------------*/
+    public Usuario usuario(String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol){
+        return new Usuario(nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
     }
     
 }

@@ -18,9 +18,10 @@ public class Usuario {
     private String contrasena;
     private String correo;
     private int telefono;
+    private int codEmpleado;
     private String rol;
 
-    public Usuario(String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, String rol) {
+    public Usuario(String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.empresa = empresa;
@@ -28,6 +29,7 @@ public class Usuario {
         this.contrasena = contrasena;
         this.correo = correo;
         this.telefono = telefono;
+        this.codEmpleado = codEmpleado;
         this.rol = rol;
     }
 
@@ -35,60 +37,68 @@ public class Usuario {
         return nombres;
     }
 
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public String getEmpresa() {
-        return empresa;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public int getTelefono() {
-        return telefono;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
     public void setNombres(String nombres) {
         this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
     }
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
 
+    public String getEmpresa() {
+        return empresa;
+    }
+
     public void setEmpresa(String empresa) {
         this.empresa = empresa;
+    }
+
+    public String getUsuario() {
+        return usuario;
     }
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 
+    public String getContrasena() {
+        return contrasena;
+    }
+
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getCorreo() {
+        return correo;
     }
 
     public void setCorreo(String correo) {
         this.correo = correo;
     }
 
+    public int getTelefono() {
+        return telefono;
+    }
+
     public void setTelefono(int telefono) {
         this.telefono = telefono;
+    }
+
+    public int getCodEmpleado() {
+        return codEmpleado;
+    }
+
+    public void setCodEmpleado(int codEmpleado) {
+        this.codEmpleado = codEmpleado;
+    }
+
+    public String getRol() {
+        return rol;
     }
 
     public void setRol(String rol) {
