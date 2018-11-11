@@ -35,6 +35,11 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private void initComponents() {
 
         rbtnG_ingresoEgreso = new javax.swing.ButtonGroup();
+        jframe_agregarCuenta = new javax.swing.JFrame();
+        jPanel3 = new javax.swing.JPanel();
+        lbl_titulo = new javax.swing.JLabel();
+        lbl_nombreCuenta = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -54,6 +59,54 @@ public class NuevaEntrada extends javax.swing.JFrame {
         lbl_descripcion = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         btn_agregarCuenta = new javax.swing.JButton();
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        lbl_titulo.setText("Agregar Nueva Cuenta");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(lbl_titulo)
+                .addContainerGap(383, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(lbl_titulo)
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
+
+        lbl_nombreCuenta.setText("Nombre de la cuenta");
+
+        jLabel2.setText("jLabel2");
+
+        javax.swing.GroupLayout jframe_agregarCuentaLayout = new javax.swing.GroupLayout(jframe_agregarCuenta.getContentPane());
+        jframe_agregarCuenta.getContentPane().setLayout(jframe_agregarCuentaLayout);
+        jframe_agregarCuentaLayout.setHorizontalGroup(
+            jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_nombreCuenta)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jframe_agregarCuentaLayout.setVerticalGroup(
+            jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lbl_nombreCuenta)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGap(0, 244, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -273,15 +326,20 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbox_cuentas;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JFrame jframe_agregarCuenta;
     private javax.swing.JLabel lbl_cuenta;
     private javax.swing.JLabel lbl_descripcion;
     private javax.swing.JLabel lbl_monto;
+    private javax.swing.JLabel lbl_nombreCuenta;
+    private javax.swing.JLabel lbl_titulo;
     private javax.swing.ButtonGroup rbtnG_ingresoEgreso;
     private javax.swing.JRadioButton rbtn_egreso;
     private javax.swing.JRadioButton rbtn_ingreso;
