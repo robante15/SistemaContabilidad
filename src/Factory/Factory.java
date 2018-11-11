@@ -27,11 +27,11 @@ public class Factory {
     public NuevaEntrada nuevaEntrada() {
         return new NuevaEntrada();
     }
-    
+
     public RegistroUsuario registroUsuario() {
         return new RegistroUsuario();
     }
-    
+
     public RegistroEmpresa registroEmpresa() {
         return new RegistroEmpresa();
     }
@@ -47,6 +47,10 @@ public class Factory {
 
     public Empresa empresa(String nomre_empresa, String forma_juridica, String fecha_constitucion, String direccion, String correo, String registro_legal, int telefono, String dueno, String sector_actividad, String resumen_negocio) {
         return new Empresa(nomre_empresa, forma_juridica, fecha_constitucion, direccion, correo, registro_legal, telefono, dueno, sector_actividad, resumen_negocio);
+    }
+
+    public Cuenta cuenta(String nomreCuenta, String clasificacion, String tipoSaldo, int codigo) {
+        return new Cuenta(nomreCuenta, clasificacion, tipoSaldo, codigo);
     }
 
 }

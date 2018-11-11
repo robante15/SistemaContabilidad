@@ -42,9 +42,9 @@ public class BaseDatos {
 
         } else {
             System.out.println("El directorio no existe");
-            if(folder.mkdir()){
+            if (folder.mkdir()) {
                 System.out.println("Se ha creado el directorio correctamente");
-            }else{
+            } else {
                 System.out.println("Error: No se ha creado el directorio");
             }
         }
@@ -203,6 +203,66 @@ public class BaseDatos {
     }
 
     /*
+    Este metodo crea una nueva tabla de cuentas, no hace ninguna corrovoración de que si ya existe, debido a que si ya existe el SQL tirará un error
+    entonces el try-catch lo recogerá, y no hará nada, por ende no hay ningun problema :v )
+     */
+    public void crearTablaCuentas(String nombreTabla) throws SQLException {
+        try {
+            Statement sentencia = null;
+            sentencia = connect.createStatement();
+            String sql = "CREATE TABLE " + nombreTabla + " (\n"
+                    + "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n"
+                    + "nombre_cuenta TEXT NOT NULL,\n"
+                    + "tipoSaldo TEXT NOT NULL,\n"
+                    + "clasificacion TEXT NOT NULL\n"
+                    + ")";
+            sentencia.execute(sql);
+            sentencia.close();
+            connect.close();
+            System.out.println("Exito al crear la tabla");
+        } catch (Exception e) {
+            System.out.println("Error al crear la tabla o que ya estaba creada");
+        }
+    }
+
+    /*
+    Este metodo lo que hace es devolver un array con los nombres de todas las cuentas que hay registradas, esto sirve para que en el registro de una nueva cuenta se pueda
+    mostrar un ComboBox con todas las cuentas que hay registradas en la BD
+     */
+    public ArrayList<String> listarCuentas() {
+        factory = new Factory();
+        ArrayList<String> listaCuentas = new ArrayList<String>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM cuentas ORDER BY nombre_cuenta ASC";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                String nombre_empresa = rs.getString("nombre_cuenta");
+
+                listaCuentas.add(nombre_empresa);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaCuentas;
+    }
+
+    /*
     Este metodo lo que hace es devolver un array con los nombres de todas las empresas que hay registradas, esto sirve para que en el registro de usuario se pueda
     mostrar un ComboBox con todas las empresas que hay registradas en la BD
      */
@@ -316,6 +376,44 @@ public class BaseDatos {
             st.setInt(7, usuario.getTelefono());
             st.setInt(8, usuario.getCodEmpleado());
             st.setString(9, usuario.getRol());
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Nuevo registro agregado correctamente");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /*
+    Este metodo recoge un objeto de tipo 'Cuenta' el cual es una entidad ubicada en Entidades -> Cuenta, este objeto contiene todos los datos de la cuenta (nombre de cuenta,
+    tipo de saldo y clasificación) y lo que hace es enviar eso a la base de datos para guardar el registro de la nueva cuenta
+     */
+    public void registrarCuenta(Cuenta cuenta) {
+
+        try {
+            this.crearTablaUsuario("usuarios");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "INSERT INTO cuentas (nombre_cuenta, tipoSaldo, clasificacion) VALUES (?,?,?)";
+            st = connect.prepareStatement(SQLQuery);
+
+            st.setString(1, cuenta.getNomreCuenta());
+            st.setString(2, cuenta.getTipoSaldo());
+            st.setString(3, cuenta.getClasificacion());
             st.executeUpdate();
             JOptionPane.showMessageDialog(null, "Nuevo registro agregado correctamente");
         } catch (SQLException ex) {

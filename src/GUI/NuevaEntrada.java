@@ -7,6 +7,8 @@ package GUI;
 
 import Entidades.*;
 import Factory.Factory;
+import Procesos.BaseDatos;
+import java.util.ArrayList;
 
 /**
  *
@@ -22,6 +24,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
 
     public NuevaEntrada() {
         initComponents();
+        this.setLocationRelativeTo(null);
         factory = new Factory();
     }
 
@@ -39,7 +42,15 @@ public class NuevaEntrada extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         lbl_titulo = new javax.swing.JLabel();
         lbl_nombreCuenta = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lbl_clasificacion = new javax.swing.JLabel();
+        lbl_tipoSaldo = new javax.swing.JLabel();
+        btn_agregarCuentaOK = new javax.swing.JButton();
+        btn_cancelarCuenta = new javax.swing.JButton();
+        txt_nombreCuenta = new javax.swing.JTextField();
+        cbox_clasificacionCuenta = new javax.swing.JComboBox<>();
+        rbtn_deudor = new javax.swing.JRadioButton();
+        rbtn_acreedor = new javax.swing.JRadioButton();
+        rbtnG_deudorAcreedor = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -60,6 +71,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         btn_agregarCuenta = new javax.swing.JButton();
 
+        jframe_agregarCuenta.setMinimumSize(new java.awt.Dimension(400, 425));
+
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         lbl_titulo.setText("Agregar Nueva Cuenta");
@@ -71,7 +84,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(lbl_titulo)
-                .addContainerGap(383, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,7 +96,32 @@ public class NuevaEntrada extends javax.swing.JFrame {
 
         lbl_nombreCuenta.setText("Nombre de la cuenta");
 
-        jLabel2.setText("jLabel2");
+        lbl_clasificacion.setText("Clasificación");
+
+        lbl_tipoSaldo.setText("Tipo de Saldo");
+
+        btn_agregarCuentaOK.setText("Agregar");
+        btn_agregarCuentaOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregarCuentaOKActionPerformed(evt);
+            }
+        });
+
+        btn_cancelarCuenta.setText("Cancelar");
+        btn_cancelarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelarCuentaActionPerformed(evt);
+            }
+        });
+
+        cbox_clasificacionCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Pasivo", "Capital", "Ingresos", "Costos", "Gastos" }));
+
+        rbtnG_deudorAcreedor.add(rbtn_deudor);
+        rbtn_deudor.setSelected(true);
+        rbtn_deudor.setText("Deudor");
+
+        rbtnG_deudorAcreedor.add(rbtn_acreedor);
+        rbtn_acreedor.setText("Acreedor");
 
         javax.swing.GroupLayout jframe_agregarCuentaLayout = new javax.swing.GroupLayout(jframe_agregarCuenta.getContentPane());
         jframe_agregarCuenta.getContentPane().setLayout(jframe_agregarCuentaLayout);
@@ -91,10 +129,26 @@ public class NuevaEntrada extends javax.swing.JFrame {
             jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_nombreCuenta)
-                    .addComponent(jLabel2))
+                    .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_nombreCuenta)
+                            .addComponent(lbl_clasificacion)
+                            .addComponent(lbl_tipoSaldo))
+                        .addGap(18, 18, 18)
+                        .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
+                                .addComponent(rbtn_deudor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                                .addComponent(rbtn_acreedor))
+                            .addComponent(txt_nombreCuenta)
+                            .addComponent(cbox_clasificacionCuenta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(btn_cancelarCuenta)
+                        .addGap(100, 100, 100)
+                        .addComponent(btn_agregarCuentaOK)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jframe_agregarCuentaLayout.setVerticalGroup(
@@ -102,13 +156,31 @@ public class NuevaEntrada extends javax.swing.JFrame {
             .addGroup(jframe_agregarCuentaLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(lbl_nombreCuenta)
+                .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_nombreCuenta)
+                    .addComponent(txt_nombreCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(0, 244, Short.MAX_VALUE))
+                .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_clasificacion)
+                    .addComponent(cbox_clasificacionCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_tipoSaldo)
+                    .addComponent(rbtn_deudor)
+                    .addComponent(rbtn_acreedor))
+                .addGap(18, 18, 18)
+                .addGroup(jframe_agregarCuentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_agregarCuentaOK)
+                    .addComponent(btn_cancelarCuenta))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                apertura(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -275,12 +347,42 @@ public class NuevaEntrada extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_agregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarCuentaActionPerformed
-        // TODO add your handling code here:
+        this.jframe_agregarCuenta.setVisible(true);
     }//GEN-LAST:event_btn_agregarCuentaActionPerformed
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btn_cancelarActionPerformed
+
+    private void btn_cancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarCuentaActionPerformed
+        this.jframe_agregarCuenta.setVisible(false);
+    }//GEN-LAST:event_btn_cancelarCuentaActionPerformed
+
+    private void apertura(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_apertura
+        BaseDatos base = factory.baseDatos();
+        ArrayList<String> tipoCuentas = base.listarCuentas();
+        this.cbox_cuentas.removeAllItems();
+        for (int i = 0; i < tipoCuentas.size(); i++) {
+            this.cbox_cuentas.addItem(tipoCuentas.get(i));
+        }
+    }//GEN-LAST:event_apertura
+
+    private void btn_agregarCuentaOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarCuentaOKActionPerformed
+        String nombreCuenta = this.lbl_nombreCuenta.getText();
+        String clasificacion = this.lbl_clasificacion.getText();
+        String tipoSaldo = null;
+        if (this.rbtn_deudor.isSelected()) {
+            tipoSaldo = "Deudor";
+        } else {
+            if (this.rbtn_acreedor.isSelected()) {
+                tipoSaldo = "Acreedor";
+            }
+        }
+
+        Cuenta cuenta = factory.cuenta(nombreCuenta, clasificacion, tipoSaldo, 0);
+        BaseDatos baseDatos = factory.baseDatos();
+        baseDatos.registrarCuenta(cuenta);
+    }//GEN-LAST:event_btn_agregarCuentaOKActionPerformed
 
     /**
      * @param args the command line arguments
@@ -296,16 +398,24 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NuevaEntrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaEntrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NuevaEntrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaEntrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NuevaEntrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaEntrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NuevaEntrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaEntrada.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -321,12 +431,14 @@ public class NuevaEntrada extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_aceptar;
     private javax.swing.JButton btn_agregarCuenta;
+    private javax.swing.JButton btn_agregarCuentaOK;
     private javax.swing.JButton btn_añadir;
     private javax.swing.JButton btn_cancelar;
+    private javax.swing.JButton btn_cancelarCuenta;
+    private javax.swing.JComboBox<String> cbox_clasificacionCuenta;
     private javax.swing.JComboBox<String> cbox_cuentas;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -335,14 +447,20 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JFrame jframe_agregarCuenta;
+    private javax.swing.JLabel lbl_clasificacion;
     private javax.swing.JLabel lbl_cuenta;
     private javax.swing.JLabel lbl_descripcion;
     private javax.swing.JLabel lbl_monto;
     private javax.swing.JLabel lbl_nombreCuenta;
+    private javax.swing.JLabel lbl_tipoSaldo;
     private javax.swing.JLabel lbl_titulo;
+    private javax.swing.ButtonGroup rbtnG_deudorAcreedor;
     private javax.swing.ButtonGroup rbtnG_ingresoEgreso;
+    private javax.swing.JRadioButton rbtn_acreedor;
+    private javax.swing.JRadioButton rbtn_deudor;
     private javax.swing.JRadioButton rbtn_egreso;
     private javax.swing.JRadioButton rbtn_ingreso;
     private javax.swing.JTextArea txtA_descripcion;
+    private javax.swing.JTextField txt_nombreCuenta;
     // End of variables declaration//GEN-END:variables
 }
