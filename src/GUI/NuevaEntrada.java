@@ -72,6 +72,11 @@ public class NuevaEntrada extends javax.swing.JFrame {
         btn_agregarCuenta = new javax.swing.JButton();
 
         jframe_agregarCuenta.setMinimumSize(new java.awt.Dimension(400, 425));
+        jframe_agregarCuenta.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                cerrarCuadroCuenta(evt);
+            }
+        });
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -176,6 +181,13 @@ public class NuevaEntrada extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                focusGained(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 apertura(evt);
@@ -356,7 +368,23 @@ public class NuevaEntrada extends javax.swing.JFrame {
 
     private void btn_cancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarCuentaActionPerformed
         this.jframe_agregarCuenta.setVisible(false);
+        BaseDatos base = factory.baseDatos();
+        ArrayList<String> tipoCuentas = base.listarCuentas();
+        this.cbox_cuentas.removeAllItems();
+        for (int i = 0; i < tipoCuentas.size(); i++) {
+            this.cbox_cuentas.addItem(tipoCuentas.get(i));
+        }
     }//GEN-LAST:event_btn_cancelarCuentaActionPerformed
+
+    private void cargarComboBox() {
+        this.jframe_agregarCuenta.setVisible(false);
+        BaseDatos base = factory.baseDatos();
+        ArrayList<String> tipoCuentas = base.listarCuentas();
+        this.cbox_cuentas.removeAllItems();
+        for (int i = 0; i < tipoCuentas.size(); i++) {
+            this.cbox_cuentas.addItem(tipoCuentas.get(i));
+        }
+    }
 
     private void apertura(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_apertura
         BaseDatos base = factory.baseDatos();
@@ -368,8 +396,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
     }//GEN-LAST:event_apertura
 
     private void btn_agregarCuentaOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarCuentaOKActionPerformed
-        String nombreCuenta = this.lbl_nombreCuenta.getText();
-        String clasificacion = this.lbl_clasificacion.getText();
+        String nombreCuenta = this.txt_nombreCuenta.getText();
+        String clasificacion = this.cbox_clasificacionCuenta.getSelectedItem().toString();
         String tipoSaldo = null;
         if (this.rbtn_deudor.isSelected()) {
             tipoSaldo = "Deudor";
@@ -383,6 +411,19 @@ public class NuevaEntrada extends javax.swing.JFrame {
         BaseDatos baseDatos = factory.baseDatos();
         baseDatos.registrarCuenta(cuenta);
     }//GEN-LAST:event_btn_agregarCuentaOKActionPerformed
+
+    private void cerrarCuadroCuenta(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_cerrarCuadroCuenta
+        BaseDatos base = factory.baseDatos();
+        ArrayList<String> tipoCuentas = base.listarCuentas();
+        this.cbox_cuentas.removeAllItems();
+        for (int i = 0; i < tipoCuentas.size(); i++) {
+            this.cbox_cuentas.addItem(tipoCuentas.get(i));
+        }
+    }//GEN-LAST:event_cerrarCuadroCuenta
+
+    private void focusGained(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_focusGained
+        this.cargarComboBox();
+    }//GEN-LAST:event_focusGained
 
     /**
      * @param args the command line arguments

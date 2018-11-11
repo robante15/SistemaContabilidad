@@ -10,6 +10,9 @@
           <Dimension value="[400, 425]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="cerrarCuadroCuenta"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -192,6 +195,7 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
+    <EventHandler event="windowGainedFocus" listener="java.awt.event.WindowFocusListener" parameters="java.awt.event.WindowEvent" handler="focusGained"/>
     <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="apertura"/>
   </Events>
   <AuxValues>
