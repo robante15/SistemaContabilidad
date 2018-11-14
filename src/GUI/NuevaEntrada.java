@@ -8,7 +8,11 @@ package GUI;
 import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,8 +28,32 @@ public class NuevaEntrada extends javax.swing.JFrame {
 
     public NuevaEntrada() {
         initComponents();
+        cargarColumnasTabla();
+        cargarModeloTabla();
         this.setLocationRelativeTo(null);
         factory = new Factory();
+    }
+
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+
+    /*
+    Este metodo define las columnas que va a tener la tabla
+     */
+    private void cargarColumnasTabla() {
+
+        modeloTabla.addColumn("Fecha");
+        modeloTabla.addColumn("Partida N°");
+        modeloTabla.addColumn("Ingreso");
+        modeloTabla.addColumn("Egreso");
+
+    }
+
+    private void cargarModeloTabla() {
+        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        java.util.Date fecha = new Date();
+        int columnas = 1;
+        modeloTabla.setNumRows(columnas);
+        modeloTabla.setValueAt(df.format(fecha), 0, 0);
     }
 
     /**
@@ -55,7 +83,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla_NuevaEntrada = new javax.swing.JTable();
         lbl_cuenta = new javax.swing.JLabel();
         cbox_cuentas = new javax.swing.JComboBox<>();
         btn_aceptar = new javax.swing.JButton();
@@ -215,18 +243,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tabla_NuevaEntrada.setModel(modeloTabla);
+        jScrollPane1.setViewportView(tabla_NuevaEntrada);
 
         lbl_cuenta.setText("Cuenta");
 
@@ -485,7 +503,6 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JFrame jframe_agregarCuenta;
     private javax.swing.JLabel lbl_clasificacion;
@@ -501,6 +518,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbtn_deudor;
     private javax.swing.JRadioButton rbtn_egreso;
     private javax.swing.JRadioButton rbtn_ingreso;
+    private javax.swing.JTable tabla_NuevaEntrada;
     private javax.swing.JTextArea txtA_descripcion;
     private javax.swing.JTextField txt_nombreCuenta;
     // End of variables declaration//GEN-END:variables

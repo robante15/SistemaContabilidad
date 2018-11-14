@@ -154,9 +154,12 @@ public class Login extends javax.swing.JFrame {
         BaseDatos baseDatos = factory.baseDatos();
         boolean aprovada = baseDatos.ValidarLogin(user, contrasena);
 
+        
+        
         if (aprovada == true) {
+            Usuario userOBJ = baseDatos.obtenerUsuario(user); //A la pantalla principal se la pasa un objeto usuario, para saber quien es el que ha logeado
             System.out.print("Ha sido validado el inicio de sesión");
-            Principal principal = factory.principal();
+            Principal principal = factory.principal(userOBJ); //A la GUI principal hay que pasarle un objeto de tipo usuario
             principal.setVisible(true);
             this.dispose();
         } else {

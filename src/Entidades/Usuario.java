@@ -11,6 +11,7 @@ package Entidades;
  */
 public class Usuario {
 
+    private int id;
     private String nombres;
     private String apellidos;
     private String empresa;
@@ -21,7 +22,8 @@ public class Usuario {
     private int codEmpleado;
     private String rol;
 
-    public Usuario(String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
+    public Usuario(int id, String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
+        this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.empresa = empresa;
@@ -31,6 +33,14 @@ public class Usuario {
         this.telefono = telefono;
         this.codEmpleado = codEmpleado;
         this.rol = rol;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombres() {

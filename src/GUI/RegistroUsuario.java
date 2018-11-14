@@ -261,7 +261,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
         codEmpleado = Integer.valueOf(this.txt_codEmpleado.getText());
         rol = this.cbox_empresa.getItemAt(this.cbox_rol.getSelectedIndex());
 
-        Usuario usuarioOBJ = factory.usuario(nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
+        Usuario usuarioOBJ = factory.usuario(0, nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
 
         BaseDatos baseDatos = factory.baseDatos();
         baseDatos.registrarUsuario(usuarioOBJ);

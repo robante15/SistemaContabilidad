@@ -17,7 +17,13 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import Entidades.*;
 import Factory.Factory;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -223,6 +229,184 @@ public class BaseDatos {
         } catch (Exception e) {
             System.out.println("Error al crear la tabla o que ya estaba creada");
         }
+    }
+
+    //Retorna un objeto de tipo Usuario nada más ingresandole un UserName, sirve para pasarle un objeto de tipo usuario al FormPrincipal
+    public Usuario obtenerUsuario(String usuario) {
+        factory = new Factory();
+        Usuario perfil = null;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM usuarios WHERE usuario = '" + usuario + "'";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String nombres = rs.getString("nombre");
+                String apellidos = rs.getString("apellido");
+                String empresa = rs.getString("empresa");
+                String userName = rs.getString("usuario");
+                String contrasena = null;
+                String correo = rs.getString("correo");
+                int telefono = rs.getInt("telefono");
+                int codEmpleado = rs.getInt("codEmpleado");
+                String rol = rs.getString("rol");
+
+                perfil = factory.usuario(id, nombres, apellidos, empresa, userName, contrasena, correo, telefono, codEmpleado, rol);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return perfil;
+    }
+
+    //Retorna un objeto de tipo cuenta según el nombre de cuenta que uno le ingrese, es utilizado a la hora de relacionar las partidas, con las transacciones
+    public Cuenta obtenerCuenta(String cuentaName) {
+        factory = new Factory();
+        Cuenta cuenta = null;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM cuentas WHERE nombre_cuenta = '" + cuentaName + "'";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String nombre_cuenta = rs.getString("nombre_cuenta");
+                String tipoSaldo = rs.getString("tipoSaldo");
+                String clasificacion = rs.getString("clasificacion");
+
+                cuenta = factory.cuenta(nombre_cuenta, clasificacion, tipoSaldo, id);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return cuenta;
+    }
+
+    //Retorna un objeto de tipo cuenta según el nombre de cuenta que uno le ingrese, es utilizado a la hora de relacionar las partidas, con las transacciones
+    public Partida obtenerPartida(int partidaID) {
+        factory = new Factory();
+        Partida partida = null;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM partidas WHERE id = " + partidaID + "";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                int numPartida = rs.getInt("numPartida");
+                String fecha = rs.getString("fecha");
+                String descripcion = rs.getString("descripcion");
+                float totalIngresos = rs.getFloat("totalIngresos");
+                float totalEgresos = rs.getFloat("totalEgresos");
+
+                partida = factory.partida(id, numPartida, fecha, descripcion, totalIngresos, totalEgresos);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return partida;
+    }
+
+    //Retorna un array de transacciones realizadas y la fecha de realización
+    public ArrayList<TransaccionPopulada> obtenerTransaccionesTODOS() {
+        factory = new Factory();
+        ArrayList<TransaccionPopulada> todasTransacciones = new ArrayList<TransaccionPopulada>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT transacciones.*, partidas.fecha, partidas.numPartida, cuentas.nombre_cuenta\n"
+                    + "FROM transacciones \n"
+                    + "JOIN partidas ON transacciones.idPartida = partidas.id\n"
+                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id\n"
+                    + "ORDER BY partidas.fecha DESC ";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                int idPartida = rs.getInt("idPartida");
+                int numPartida = rs.getInt("numPartida");
+                float trasaccionIngreso = rs.getFloat("transaccionIngreso");
+                float transaccionEgresos = rs.getFloat("transaccionEgresos");
+                String fecha = rs.getString("fecha");
+                String nombre_cuenta = rs.getString("nombre_cuenta");
+
+                Date date = null;
+                DateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+
+                //Es sumamente ineficiente pero lo que hace es convertir de un tipo de fecha a otro más bunito
+                try {
+                    date = format.parse(fecha);
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                DateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
+                String fecha2 = df.format(date);
+
+                TransaccionPopulada TransaccionPopuladaOBJ = factory.transaccionPopulada(id, idPartida, numPartida, trasaccionIngreso, transaccionEgresos, fecha2, nombre_cuenta);
+
+                todasTransacciones.add(TransaccionPopuladaOBJ);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return todasTransacciones;
     }
 
     /*

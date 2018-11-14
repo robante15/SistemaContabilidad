@@ -8,6 +8,7 @@ package Factory;
 import GUI.*;
 import Procesos.*;
 import Entidades.*;
+import java.util.Date;
 
 /**
  *
@@ -19,9 +20,13 @@ public class Factory {
         return new BaseDatos();
     }
 
+    public Fechas fechas(){
+        return new Fechas();
+    }
+    
     /*----------------------CARGA DE LAS GUI-----------------------------*/
-    public Principal principal() {
-        return new Principal();
+    public Principal principal(Usuario usuario) {
+        return new Principal(usuario);
     }
 
     public NuevaEntrada nuevaEntrada() {
@@ -41,8 +46,8 @@ public class Factory {
     }
 
     /*----------------------ENTIDADES--------------------------*/
-    public Usuario usuario(String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
-        return new Usuario(nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
+    public Usuario usuario(int id, String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
+        return new Usuario(id, nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
     }
 
     public Empresa empresa(String nomre_empresa, String forma_juridica, String fecha_constitucion, String direccion, String correo, String registro_legal, int telefono, String dueno, String sector_actividad, String resumen_negocio) {
@@ -51,6 +56,22 @@ public class Factory {
 
     public Cuenta cuenta(String nomreCuenta, String clasificacion, String tipoSaldo, int codigo) {
         return new Cuenta(nomreCuenta, clasificacion, tipoSaldo, codigo);
+    }
+
+    public Partida partida(int id, int numPartida, String fecha, String descripcion, float totalIngresos, float totalEgresos) {
+        return new Partida(id, numPartida, fecha, descripcion, totalIngresos, totalEgresos);
+    }
+
+    public Transaccion transaccion(int id, int idPartida, float trasaccionIngreso, float transaccionEgresos) {
+        return new Transaccion(id, idPartida, trasaccionIngreso, transaccionEgresos);
+    }
+    
+    public TransaccionPopulada transaccionPopulada(int id, int idPartida, int numPartida, float trasaccionIngreso, float transaccionEgresos, String fecha, String nombre_cuenta) {
+        return new TransaccionPopulada(id, idPartida, numPartida, trasaccionIngreso, transaccionEgresos, fecha, nombre_cuenta);
+    }
+    
+    public RangoFecha rangoFecha(Date inicio, Date fin){
+        return new RangoFecha(inicio, fin);
     }
 
 }
