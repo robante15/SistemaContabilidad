@@ -8,6 +8,11 @@ package GUI;
 import Entidades.Usuario;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +30,82 @@ public class RegistroUsuario extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         factory = new Factory();
+        
+        /* DECORACIÓN UI */
+        
+        try
+        {
+            InputStream is = RegistroUsuario.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            txt_nombres.setFont(sizedFont);
+            txt_apellidos.setFont(sizedFont);
+            cbox_empresa.setFont(sizedFont);
+            txt_usuario.setFont(sizedFont);
+            txt_contrasena.setFont(sizedFont);
+            txt_correo.setFont(sizedFont);
+            txt_telefono.setFont(sizedFont);
+            txt_codEmpleado.setFont(sizedFont);
+            cbox_rol.setFont(sizedFont);
+        }
+        catch (FontFormatException | IOException ex) {    }
+        
+        txt_nombres.setBorder(null);
+        txt_nombres.setOpaque(false);
+        txt_nombres.setBackground(new Color(0,0,0,0));
+        txt_nombres.setCaretColor(Color.WHITE);
+        txt_nombres.setForeground(Color.WHITE);
+        
+        txt_apellidos.setBorder(null);
+        txt_apellidos.setOpaque(false);
+        txt_apellidos.setBackground(new Color(0,0,0,0));
+        txt_apellidos.setCaretColor(Color.WHITE);
+        txt_apellidos.setForeground(Color.WHITE);
+        
+        txt_usuario.setBorder(null);
+        txt_usuario.setOpaque(false);
+        txt_usuario.setBackground(new Color(0,0,0,0));
+        txt_usuario.setCaretColor(Color.WHITE);
+        txt_usuario.setForeground(Color.WHITE);
+        
+        txt_contrasena.setBorder(null);
+        txt_contrasena.setOpaque(false);
+        txt_contrasena.setBackground(new Color(0,0,0,0));
+        txt_contrasena.setCaretColor(Color.WHITE);
+        txt_contrasena.setForeground(Color.WHITE);
+        
+        txt_correo.setBorder(null);
+        txt_correo.setOpaque(false);
+        txt_correo.setBackground(new Color(0,0,0,0));
+        txt_correo.setCaretColor(Color.WHITE);
+        txt_correo.setForeground(Color.WHITE);
+        
+        txt_telefono.setBorder(null);
+        txt_telefono.setOpaque(false);
+        txt_telefono.setBackground(new Color(0,0,0,0));
+        txt_telefono.setCaretColor(Color.WHITE);
+        txt_telefono.setForeground(Color.WHITE);
+        
+        txt_codEmpleado.setBorder(null);
+        txt_codEmpleado.setOpaque(false);
+        txt_codEmpleado.setBackground(new Color(0,0,0,0));
+        txt_codEmpleado.setCaretColor(Color.WHITE);
+        txt_codEmpleado.setForeground(Color.WHITE);
+        
+        btn_registro.setOpaque(false);
+        btn_registro.setContentAreaFilled(false);
+        btn_registro.setBorderPainted(false);
+        
+        btn_cancelar.setOpaque(false);
+        btn_cancelar.setContentAreaFilled(false);
+        btn_cancelar.setBorderPainted(false);
+        
+        btn_agregarEmpresa.setOpaque(false);
+        btn_agregarEmpresa.setContentAreaFilled(false);
+        btn_agregarEmpresa.setBorderPainted(false);
+        
+        /* FIN DECORACIÓN UI */
     }
 
     /**
@@ -36,200 +117,90 @@ public class RegistroUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        lbl_title = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        btn_registro = new javax.swing.JButton();
-        btn_cancelar = new javax.swing.JButton();
-        lbl_nombres = new javax.swing.JLabel();
-        lbl_apellidos = new javax.swing.JLabel();
-        lbl_empresa = new javax.swing.JLabel();
-        lbl_usuario = new javax.swing.JLabel();
-        lbl_contrasena = new javax.swing.JLabel();
-        lbl_correo = new javax.swing.JLabel();
-        lbl_telefono = new javax.swing.JLabel();
-        lbl_rol = new javax.swing.JLabel();
-        txt_contrasena = new javax.swing.JPasswordField();
         txt_nombres = new javax.swing.JTextField();
         txt_apellidos = new javax.swing.JTextField();
-        txt_usuario = new javax.swing.JTextField();
         cbox_empresa = new javax.swing.JComboBox<>();
+        txt_usuario = new javax.swing.JTextField();
         btn_agregarEmpresa = new javax.swing.JButton();
+        txt_contrasena = new javax.swing.JPasswordField();
         txt_correo = new javax.swing.JTextField();
         txt_telefono = new javax.swing.JTextField();
-        cbox_rol = new javax.swing.JComboBox<>();
-        lbl_codEmpleado = new javax.swing.JLabel();
         txt_codEmpleado = new javax.swing.JTextField();
+        cbox_rol = new javax.swing.JComboBox<>();
+        btn_cancelar = new javax.swing.JButton();
+        btn_registro = new javax.swing.JButton();
+        Background = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Registro de usuario");
+        setMinimumSize(new java.awt.Dimension(528, 796));
+        setPreferredSize(new java.awt.Dimension(528, 796));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 apertura(evt);
             }
         });
+        getContentPane().setLayout(null);
+        getContentPane().add(txt_nombres);
+        txt_nombres.setBounds(158, 213, 290, 24);
+        getContentPane().add(txt_apellidos);
+        txt_apellidos.setBounds(158, 255, 290, 24);
 
-        lbl_title.setText("Nuevo Usuario");
+        getContentPane().add(cbox_empresa);
+        cbox_empresa.setBounds(160, 303, 280, 26);
+        getContentPane().add(txt_usuario);
+        txt_usuario.setBounds(158, 339, 290, 24);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(170, 170, 170)
-                .addComponent(lbl_title)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
-                .addComponent(lbl_title)
-                .addGap(34, 34, 34))
-        );
-
-        btn_registro.setText("Registrar");
-        btn_registro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_registroActionPerformed(evt);
-            }
-        });
-
-        btn_cancelar.setText("Cancelar");
-        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cancelarActionPerformed(evt);
-            }
-        });
-
-        lbl_nombres.setText("Nombres");
-
-        lbl_apellidos.setText("Apellidos");
-
-        lbl_empresa.setText("Empresa");
-
-        lbl_usuario.setText("Usuario");
-
-        lbl_contrasena.setText("Contraseña");
-
-        lbl_correo.setText("Correo");
-
-        lbl_telefono.setText("Telefono");
-
-        lbl_rol.setText("Rol");
-
-        btn_agregarEmpresa.setText("+");
+        btn_agregarEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_agregarEmpresa.setOpaque(false);
         btn_agregarEmpresa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_agregarEmpresaActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_agregarEmpresa);
+        btn_agregarEmpresa.setBounds(450, 300, 40, 30);
+        getContentPane().add(txt_contrasena);
+        txt_contrasena.setBounds(158, 387, 290, 22);
+        getContentPane().add(txt_correo);
+        txt_correo.setBounds(158, 428, 290, 24);
+        getContentPane().add(txt_telefono);
+        txt_telefono.setBounds(158, 474, 290, 24);
+        getContentPane().add(txt_codEmpleado);
+        txt_codEmpleado.setBounds(158, 544, 290, 24);
 
         cbox_rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empresario", "Contador", "Auditor" }));
+        getContentPane().add(cbox_rol);
+        cbox_rol.setBounds(160, 590, 190, 26);
 
-        lbl_codEmpleado.setText("Cod. de Empleado");
+        btn_cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_cancelar.setOpaque(false);
+        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_cancelar);
+        btn_cancelar.setBounds(291, 682, 220, 60);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addComponent(btn_registro)
-                .addGap(36, 36, 36)
-                .addComponent(btn_cancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(65, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbl_contrasena)
-                            .addComponent(lbl_nombres)
-                            .addComponent(lbl_apellidos)
-                            .addComponent(lbl_empresa)
-                            .addComponent(lbl_usuario)
-                            .addComponent(lbl_correo)
-                            .addComponent(lbl_telefono)
-                            .addComponent(lbl_rol))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_contrasena)
-                            .addComponent(txt_apellidos)
-                            .addComponent(txt_usuario)
-                            .addComponent(cbox_empresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txt_correo)
-                            .addComponent(txt_telefono)
-                            .addComponent(cbox_rol, 0, 190, Short.MAX_VALUE)
-                            .addComponent(txt_nombres)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lbl_codEmpleado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_codEmpleado)))
-                .addGap(18, 18, 18)
-                .addComponent(btn_agregarEmpresa)
-                .addGap(37, 37, 37))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_nombres)
-                    .addComponent(txt_nombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_apellidos)
-                    .addComponent(txt_apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_empresa)
-                    .addComponent(cbox_empresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_agregarEmpresa))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_usuario)
-                    .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_contrasena)
-                    .addComponent(txt_contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_correo)
-                    .addComponent(txt_correo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_telefono)
-                    .addComponent(txt_telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_codEmpleado)
-                    .addComponent(txt_codEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_rol)
-                    .addComponent(cbox_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_registro)
-                    .addComponent(btn_cancelar))
-                .addGap(27, 27, 27))
-        );
+        btn_registro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_registro.setOpaque(false);
+        btn_registro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_registroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_registro);
+        btn_registro.setBounds(33, 682, 220, 60);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Registro Usuario.png"))); // NOI18N
+        Background.setMaximumSize(new java.awt.Dimension(1500, 1500));
+        getContentPane().add(Background);
+        Background.setBounds(0, 0, 530, 780);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -282,6 +253,16 @@ public class RegistroUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_apertura
 
+    /* Cerrar el formulario hace lo mismo que presionar el botón cancelar para evitar cerrar el programa por completo
+    
+        -> PROPIEDAD DEL JFRAME CAMBIADA : defaultCloseOperation, de EXIT_ON_CLOSE a DISPOSE.
+    */
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Login login = factory.login();
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -327,23 +308,12 @@ public class RegistroUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Background;
     private javax.swing.JButton btn_agregarEmpresa;
     private javax.swing.JButton btn_cancelar;
     private javax.swing.JButton btn_registro;
     private javax.swing.JComboBox<String> cbox_empresa;
     private javax.swing.JComboBox<String> cbox_rol;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lbl_apellidos;
-    private javax.swing.JLabel lbl_codEmpleado;
-    private javax.swing.JLabel lbl_contrasena;
-    private javax.swing.JLabel lbl_correo;
-    private javax.swing.JLabel lbl_empresa;
-    private javax.swing.JLabel lbl_nombres;
-    private javax.swing.JLabel lbl_rol;
-    private javax.swing.JLabel lbl_telefono;
-    private javax.swing.JLabel lbl_title;
-    private javax.swing.JLabel lbl_usuario;
     private javax.swing.JTextField txt_apellidos;
     private javax.swing.JTextField txt_codEmpleado;
     private javax.swing.JPasswordField txt_contrasena;

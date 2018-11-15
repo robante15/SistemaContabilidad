@@ -8,6 +8,11 @@ package GUI;
 import Entidades.Empresa;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *
@@ -24,6 +29,88 @@ public class RegistroEmpresa extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         factory = new Factory();
+        
+        try
+        {
+            InputStream is = RegistroEmpresa.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            txt_nombreEmpresa.setFont(sizedFont);
+            txt_formaJuridica.setFont(sizedFont);
+            txt_fechaConstitucion.setFont(sizedFont);
+            txtA_direccion.setFont(sizedFont);
+            txt_correo.setFont(sizedFont);
+            txt_numeroRegistro.setFont(sizedFont);
+            txt_telefono.setFont(sizedFont);
+            txt_dueno.setFont(sizedFont);
+            txt_sectorActividad.setFont(sizedFont);
+            txtA_resumenNegocio.setFont(sizedFont);
+        }
+        catch (FontFormatException | IOException ex) {    }
+        
+        txt_nombreEmpresa.setBorder(null);
+        txt_nombreEmpresa.setOpaque(false);
+        txt_nombreEmpresa.setBackground(new Color(0,0,0,0));
+        txt_nombreEmpresa.setCaretColor(Color.WHITE);
+        txt_nombreEmpresa.setForeground(Color.WHITE);
+        
+        txt_formaJuridica.setBorder(null);
+        txt_formaJuridica.setOpaque(false);
+        txt_formaJuridica.setBackground(new Color(0,0,0,0));
+        txt_formaJuridica.setCaretColor(Color.WHITE);
+        txt_formaJuridica.setForeground(Color.WHITE);
+        
+        txt_fechaConstitucion.setBorder(null);
+        txt_fechaConstitucion.setOpaque(false);
+        txt_fechaConstitucion.setBackground(new Color(0,0,0,0));
+        txt_fechaConstitucion.setCaretColor(Color.WHITE);
+        txt_fechaConstitucion.setForeground(Color.WHITE);
+        
+        txtA_direccion.setBorder(null);
+        txtA_direccion.setOpaque(false);
+        
+        
+        txt_correo.setBorder(null);
+        txt_correo.setOpaque(false);
+        txt_correo.setBackground(new Color(0,0,0,0));
+        txt_correo.setCaretColor(Color.WHITE);
+        txt_correo.setForeground(Color.WHITE);
+        
+        txt_numeroRegistro.setBorder(null);
+        txt_numeroRegistro.setOpaque(false);
+        txt_numeroRegistro.setBackground(new Color(0,0,0,0));
+        txt_numeroRegistro.setCaretColor(Color.WHITE);
+        txt_numeroRegistro.setForeground(Color.WHITE);
+        
+        txt_telefono.setBorder(null);
+        txt_telefono.setOpaque(false);
+        txt_telefono.setBackground(new Color(0,0,0,0));
+        txt_telefono.setCaretColor(Color.WHITE);
+        txt_telefono.setForeground(Color.WHITE);
+        
+        txt_dueno.setBorder(null);
+        txt_dueno.setOpaque(false);
+        txt_dueno.setBackground(new Color(0,0,0,0));
+        txt_dueno.setCaretColor(Color.WHITE);
+        txt_dueno.setForeground(Color.WHITE);
+        
+        txt_sectorActividad.setBorder(null);
+        txt_sectorActividad.setOpaque(false);
+        txt_sectorActividad.setBackground(new Color(0,0,0,0));
+        txt_sectorActividad.setCaretColor(Color.WHITE);
+        txt_sectorActividad.setForeground(Color.WHITE);
+        
+        txtA_resumenNegocio.setBorder(null);
+        txtA_resumenNegocio.setOpaque(false);
+        
+        btn_registrar.setOpaque(false);
+        btn_registrar.setContentAreaFilled(false);
+        btn_registrar.setBorderPainted(false);
+        
+        btn_cancelar.setOpaque(false);
+        btn_cancelar.setContentAreaFilled(false);
+        btn_cancelar.setBorderPainted(false);
     }
 
     /**
@@ -35,137 +122,87 @@ public class RegistroEmpresa extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         txt_nombreEmpresa = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        txt_formaJuridica = new javax.swing.JTextField();
         txt_fechaConstitucion = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txt_dueno = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        txt_telefono = new javax.swing.JTextField();
-        txt_numeroRegistro = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txt_correo = new javax.swing.JTextField();
-        txt_sectorActividad = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        btn_registrar = new javax.swing.JButton();
-        btn_cancelar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtA_resumenNegocio = new javax.swing.JTextArea();
+        txt_formaJuridica = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtA_direccion = new javax.swing.JTextArea();
+        txt_correo = new javax.swing.JTextField();
+        txt_numeroRegistro = new javax.swing.JTextField();
+        txt_telefono = new javax.swing.JTextField();
+        txt_dueno = new javax.swing.JTextField();
+        txt_sectorActividad = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtA_resumenNegocio = new javax.swing.JTextArea();
+        btn_registrar = new javax.swing.JButton();
+        btn_cancelar = new javax.swing.JButton();
+        Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(634, 878));
+        setPreferredSize(new java.awt.Dimension(634, 878));
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+        getContentPane().setLayout(null);
+        getContentPane().add(txt_nombreEmpresa);
+        txt_nombreEmpresa.setBounds(308, 222, 290, 24);
+        getContentPane().add(txt_fechaConstitucion);
+        txt_fechaConstitucion.setBounds(308, 313, 290, 24);
+        getContentPane().add(txt_formaJuridica);
+        txt_formaJuridica.setBounds(308, 264, 290, 24);
 
-        jLabel1.setText("Registro de Empresa");
+        txtA_direccion.setColumns(1);
+        txtA_direccion.setLineWrap(true);
+        txtA_direccion.setRows(1);
+        jScrollPane2.setViewportView(txtA_direccion);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(179, 179, 179)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1)
-                .addContainerGap(38, Short.MAX_VALUE))
-        );
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(310, 350, 290, 60);
+        getContentPane().add(txt_correo);
+        txt_correo.setBounds(308, 437, 290, 24);
+        getContentPane().add(txt_numeroRegistro);
+        txt_numeroRegistro.setBounds(308, 479, 290, 24);
+        getContentPane().add(txt_telefono);
+        txt_telefono.setBounds(308, 521, 290, 24);
+        getContentPane().add(txt_dueno);
+        txt_dueno.setBounds(308, 564, 290, 24);
+        getContentPane().add(txt_sectorActividad);
+        txt_sectorActividad.setBounds(308, 606, 290, 24);
 
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        txtA_resumenNegocio.setColumns(1);
+        txtA_resumenNegocio.setLineWrap(true);
+        txtA_resumenNegocio.setRows(1);
+        jScrollPane1.setViewportView(txtA_resumenNegocio);
 
-        jLabel2.setText("Nombre de la Empresa");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, -1));
-        jPanel2.add(txt_nombreEmpresa, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 190, -1));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(310, 653, 290, 90);
 
-        jLabel3.setText("Forma Juridica");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, -1, -1));
-        jPanel2.add(txt_formaJuridica, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 190, -1));
-        jPanel2.add(txt_fechaConstitucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, 190, -1));
-
-        jLabel4.setText("Fecha de Constitución");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
-
-        jLabel5.setText("Dirección");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, -1));
-        jPanel2.add(txt_dueno, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, 190, -1));
-
-        jLabel6.setText("Dueño");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, -1));
-
-        jLabel7.setText("Telefono");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
-        jPanel2.add(txt_telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 190, -1));
-        jPanel2.add(txt_numeroRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, 190, -1));
-
-        jLabel8.setText("N° de Registro");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, -1, -1));
-
-        jLabel9.setText("Correo");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, -1));
-        jPanel2.add(txt_correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 190, -1));
-        jPanel2.add(txt_sectorActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, 190, -1));
-
-        jLabel10.setText("Sector de Actividad");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 340, -1, -1));
-
-        jLabel11.setText("Resumen del Negocio");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, -1, -1));
-
-        btn_registrar.setText("Registrar");
+        btn_registrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_registrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_registrarActionPerformed(evt);
             }
         });
-        jPanel2.add(btn_registrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 510, -1, -1));
+        getContentPane().add(btn_registrar);
+        btn_registrar.setBounds(83, 792, 220, 60);
 
-        btn_cancelar.setText("Cancelar");
+        btn_cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 510, -1, -1));
+        getContentPane().add(btn_cancelar);
+        btn_cancelar.setBounds(341, 792, 220, 60);
 
-        txtA_resumenNegocio.setColumns(20);
-        txtA_resumenNegocio.setRows(5);
-        jScrollPane1.setViewportView(txtA_resumenNegocio);
-
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 190, -1));
-
-        txtA_direccion.setColumns(20);
-        txtA_direccion.setRows(5);
-        jScrollPane2.setViewportView(txtA_direccion);
-
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 190, -1));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Registro Empresa.png"))); // NOI18N
+        Background.setMaximumSize(new java.awt.Dimension(1500, 1500));
+        getContentPane().add(Background);
+        Background.setBounds(0, 0, 640, 880);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -194,6 +231,12 @@ public class RegistroEmpresa extends javax.swing.JFrame {
         baseDatos.registrarEmpresa(empresaOBJ);
 
     }//GEN-LAST:event_btn_registrarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        RegistroUsuario registroUsuario = factory.registroUsuario();
+        registroUsuario.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -239,21 +282,9 @@ public class RegistroEmpresa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Background;
     private javax.swing.JButton btn_cancelar;
     private javax.swing.JButton btn_registrar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea txtA_direccion;

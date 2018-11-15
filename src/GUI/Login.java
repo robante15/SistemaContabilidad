@@ -9,6 +9,10 @@ import Entidades.Usuario;
 import Factory.Factory;
 import Procesos.BaseDatos;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *
@@ -24,7 +28,48 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+        
         factory = new Factory();
+        
+        /* DECORACIÓN UI */
+        
+        try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            txt_usuario.setFont(sizedFont);
+            txt_contrasena.setFont(sizedFont);
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+        
+        txt_usuario.setBorder(null);
+        txt_usuario.setOpaque(false);
+        txt_usuario.setBackground(new Color(0,0,0,0));
+        txt_usuario.setCaretColor(Color.WHITE);
+        txt_usuario.setForeground(Color.WHITE);
+        
+        txt_contrasena.setBorder(null);
+        txt_contrasena.setOpaque(false);
+        txt_contrasena.setBackground(new Color(0,0,0,0));
+        txt_contrasena.setCaretColor(Color.WHITE);
+        txt_contrasena.setForeground(Color.WHITE);
+        
+        btn_aceptar.setOpaque(false);
+        btn_aceptar.setContentAreaFilled(false);
+        btn_aceptar.setBorderPainted(false);
+        
+        btn_registrar.setOpaque(false);
+        btn_registrar.setContentAreaFilled(false);
+        btn_registrar.setBorderPainted(false);
+        
+        /* FIN DECORACIÓN UI */
+        
+        
     }
 
     /**
@@ -36,114 +81,57 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jpanel_top = new javax.swing.JPanel();
-        lbl_titulo = new javax.swing.JLabel();
-        jpanel_content = new javax.swing.JPanel();
-        lbl_usuario = new javax.swing.JLabel();
-        lbl_contrasena = new javax.swing.JLabel();
         txt_usuario = new javax.swing.JTextField();
-        btn_aceptar = new javax.swing.JButton();
-        btn_cancelar = new javax.swing.JButton();
-        lbl_registrarse = new javax.swing.JLabel();
         txt_contrasena = new javax.swing.JPasswordField();
+        btn_aceptar = new javax.swing.JButton();
+        btn_registrar = new javax.swing.JButton();
+        Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jpanel_top.setBackground(new java.awt.Color(0, 153, 255));
-
-        lbl_titulo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        lbl_titulo.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_titulo.setText("Inicio de Sesión");
-
-        javax.swing.GroupLayout jpanel_topLayout = new javax.swing.GroupLayout(jpanel_top);
-        jpanel_top.setLayout(jpanel_topLayout);
-        jpanel_topLayout.setHorizontalGroup(
-            jpanel_topLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpanel_topLayout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(lbl_titulo)
-                .addContainerGap(111, Short.MAX_VALUE))
-        );
-        jpanel_topLayout.setVerticalGroup(
-            jpanel_topLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanel_topLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbl_titulo)
-                .addGap(24, 24, 24))
-        );
-
-        getContentPane().add(jpanel_top, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 380, -1));
-
-        jpanel_content.setBackground(new java.awt.Color(255, 255, 255));
-        jpanel_content.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_usuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbl_usuario.setText("Usuario");
-        jpanel_content.add(lbl_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
-
-        lbl_contrasena.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbl_contrasena.setText("Contraseña");
-        jpanel_content.add(lbl_contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, -1, -1));
+        setTitle("Iniciar Sesión");
+        setMaximumSize(new java.awt.Dimension(1500, 1500));
+        setMinimumSize(new java.awt.Dimension(400, 429));
+        setPreferredSize(new java.awt.Dimension(400, 429));
+        setResizable(false);
+        getContentPane().setLayout(null);
 
         txt_usuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jpanel_content.add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 190, -1));
+        getContentPane().add(txt_usuario);
+        txt_usuario.setBounds(88, 147, 250, 28);
+
+        txt_contrasena.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txt_contrasena);
+        txt_contrasena.setBounds(87, 228, 250, 26);
 
         btn_aceptar.setBackground(new java.awt.Color(0, 153, 255));
         btn_aceptar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btn_aceptar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_aceptar.setText("Aceptar");
         btn_aceptar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btn_aceptar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_aceptarMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_aceptarMouseExited(evt);
-            }
-        });
+        btn_aceptar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_aceptar.setOpaque(false);
         btn_aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_aceptarActionPerformed(evt);
             }
         });
-        jpanel_content.add(btn_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 110, 40));
+        getContentPane().add(btn_aceptar);
+        btn_aceptar.setBounds(20, 300, 170, 50);
 
-        btn_cancelar.setBackground(new java.awt.Color(0, 153, 255));
-        btn_cancelar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btn_cancelar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_cancelar.setText("Cancelar");
-        btn_cancelar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btn_cancelar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_cancelarMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_cancelarMouseExited(evt);
-            }
-        });
-        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
+        btn_registrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_registrar.setOpaque(false);
+        btn_registrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cancelarActionPerformed(evt);
+                btn_registrarActionPerformed(evt);
             }
         });
-        jpanel_content.add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 110, 40));
+        getContentPane().add(btn_registrar);
+        btn_registrar.setBounds(210, 300, 170, 50);
 
-        lbl_registrarse.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
-        lbl_registrarse.setForeground(new java.awt.Color(0, 51, 255));
-        lbl_registrarse.setText("Registrarse");
-        lbl_registrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lbl_registrarse.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_registrarseMouseClicked(evt);
-            }
-        });
-        jpanel_content.add(lbl_registrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, -1, -1));
-
-        txt_contrasena.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jpanel_content.add(txt_contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 190, -1));
-
-        getContentPane().add(jpanel_content, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 65, 380, 220));
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Login.png"))); // NOI18N
+        Background.setMaximumSize(new java.awt.Dimension(1500, 1500));
+        Background.setName(""); // NOI18N
+        getContentPane().add(Background);
+        Background.setBounds(0, 0, 400, 430);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -167,31 +155,11 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_aceptarActionPerformed
 
-    private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btn_cancelarActionPerformed
-
-    private void lbl_registrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_registrarseMouseClicked
+    private void btn_registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registrarActionPerformed
         RegistroUsuario registroUsuario = factory.registroUsuario();
         registroUsuario.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_lbl_registrarseMouseClicked
-
-    private void btn_aceptarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_aceptarMouseEntered
-        this.btn_aceptar.setBackground(Color.decode("#01579B"));
-    }//GEN-LAST:event_btn_aceptarMouseEntered
-
-    private void btn_aceptarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_aceptarMouseExited
-        this.btn_aceptar.setBackground(Color.decode("#0099FF"));
-    }//GEN-LAST:event_btn_aceptarMouseExited
-
-    private void btn_cancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancelarMouseEntered
-        this.btn_cancelar.setBackground(Color.decode("#01579B"));
-    }//GEN-LAST:event_btn_cancelarMouseEntered
-
-    private void btn_cancelarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancelarMouseExited
-        this.btn_cancelar.setBackground(Color.decode("#0099FF"));
-    }//GEN-LAST:event_btn_cancelarMouseExited
+    }//GEN-LAST:event_btn_registrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,14 +197,9 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Background;
     private javax.swing.JButton btn_aceptar;
-    private javax.swing.JButton btn_cancelar;
-    private javax.swing.JPanel jpanel_content;
-    private javax.swing.JPanel jpanel_top;
-    private javax.swing.JLabel lbl_contrasena;
-    private javax.swing.JLabel lbl_registrarse;
-    private javax.swing.JLabel lbl_titulo;
-    private javax.swing.JLabel lbl_usuario;
+    private javax.swing.JButton btn_registrar;
     private javax.swing.JPasswordField txt_contrasena;
     private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables
