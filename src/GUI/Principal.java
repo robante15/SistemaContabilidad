@@ -11,9 +11,19 @@ import Entidades.Usuario;
 import Factory.Factory;
 import Procesos.BaseDatos;
 import Procesos.Fechas;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,9 +45,59 @@ public class Principal extends javax.swing.JFrame {
         cargarColumnasTabla();
         cargarModeloTabla();
         BaseDatos base = factory.baseDatos();
+        this.setTitle("Panel principal: [MODO " + usuario.getRol().toUpperCase() + "]");
         this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
-        this.lbl_bienvenida.setText("Bienvenido " + usuario.getNombres());
-        this.lbl_finanzasEmpresa.setText("Finanzas de " + base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
+        this.Lbl_Nombre_Usuario.setText(usuario.getUsuario());
+        this.lbl_finanzasEmpresa.setText("Finanzas generales de la empresa");
+        
+        /* Decoración UI */
+        try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            lbl_finanzasEmpresa.setFont(sizedFont);
+            lbl_empresa.setFont(sizedFont);
+            lbl_bienvenida.setFont(sizedFont);
+            table_transaccionesRecientes.setFont(sizedFont);
+            txt_buscar.setFont(sizedFont);
+            lbl_totalMovimientos.setFont(sizedFont);
+            rbtn_mes.setFont(sizedFont);
+            rbtn_semana.setFont(sizedFont);
+            rbtn_dia.setFont(sizedFont);
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+        
+        try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Bold.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            Lbl_Nombre_Usuario.setFont(sizedFont);
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+        
+        
+        
+        btn_nuevaPartida.setOpaque(false);
+        btn_nuevaPartida.setContentAreaFilled(false);
+        btn_nuevaPartida.setBorderPainted(false);
+        
+        rbtn_mes.setOpaque(false);
+        rbtn_semana.setOpaque(false);
+        rbtn_dia.setOpaque(false);
+        
+        btn_buscar.setOpaque(false);
+        btn_buscar.setContentAreaFilled(false);
+        btn_buscar.setBorderPainted(false);
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -52,6 +112,37 @@ public class Principal extends javax.swing.JFrame {
         modeloTabla.addColumn("Ingreso");
         modeloTabla.addColumn("Egreso");
         modeloTabla.addColumn("Fecha");
+        
+        /* Decoración para centrar el texto de la primera columna y poner el texto en negrita unicamente a la primera columna */
+        DefaultTableCellRenderer R = new DefaultTableCellRenderer()
+        {
+            @Override
+            public Component getTableCellRendererComponent(JTable table,
+                            Object value, boolean isSelected, boolean hasFocus,
+                            int row, int column)
+            {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                            row, column);
+                
+                try
+                {
+                    InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Bold.ttf");
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+                    Font sizedFont = font.deriveFont(16f);
+                    setFont(sizedFont);
+                }
+                catch(FontFormatException | IOException ex){    } 
+                return this;
+            }
+ 
+        };
+        /* Se centra el texto */
+        R.setHorizontalAlignment(JLabel.CENTER);
+        
+        //Se cambia la fuente para la primera columna
+        table_transaccionesRecientes.getColumnModel().getColumn(0).setCellRenderer(R);
+        
+        
     }
 
     /*
@@ -88,7 +179,7 @@ public class Principal extends javax.swing.JFrame {
             modeloTabla.setValueAt(fecha, i, 4);
 
         }
-        this.lbl_totalMovimientos.setText("Total de Movimientos     Ingresos: $ " + (double) Math.round(totalIngresos * 100d) / 100d + "     Egresos: $" + (double) Math.round(totalEgresos * 100d) / 100d);
+        this.lbl_totalMovimientos.setText("Total de Movimientos:     Ingresos: $ " + (double) Math.round(totalIngresos * 100d) / 100d + "     Egresos: $" + (double) Math.round(totalEgresos * 100d) / 100d);
 
     }
 
@@ -102,20 +193,20 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         rbtnG_periodoTiempo = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        btn_buscar = new javax.swing.JButton();
+        txt_buscar = new javax.swing.JTextField();
+        rbtn_dia = new javax.swing.JRadioButton();
+        rbtn_semana = new javax.swing.JRadioButton();
+        rbtn_mes = new javax.swing.JRadioButton();
+        lbl_totalMovimientos = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_transaccionesRecientes = new javax.swing.JTable();
-        rbtn_mes = new javax.swing.JRadioButton();
-        rbtn_semana = new javax.swing.JRadioButton();
-        rbtn_dia = new javax.swing.JRadioButton();
-        lbl_totalMovimientos = new javax.swing.JLabel();
         btn_nuevaPartida = new javax.swing.JButton();
-        txt_buscar = new javax.swing.JTextField();
-        btn_buscar = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
         lbl_finanzasEmpresa = new javax.swing.JLabel();
         lbl_empresa = new javax.swing.JLabel();
         lbl_bienvenida = new javax.swing.JLabel();
+        Lbl_Nombre_Usuario = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         bMenu_archivo = new javax.swing.JMenu();
         btnM_salir = new javax.swing.JMenuItem();
@@ -128,109 +219,101 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1125, 810));
+        setPreferredSize(new java.awt.Dimension(1125, 810));
+        setResizable(false);
+        getContentPane().setLayout(null);
 
-        table_transaccionesRecientes.setModel(modeloTabla);
-        jScrollPane1.setViewportView(table_transaccionesRecientes);
-
-        rbtnG_periodoTiempo.add(rbtn_mes);
-        rbtn_mes.setText("Este mes");
-
-        rbtnG_periodoTiempo.add(rbtn_semana);
-        rbtn_semana.setText("Esta semana");
+        btn_buscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btn_buscar);
+        btn_buscar.setBounds(911, 162, 200, 60);
+        getContentPane().add(txt_buscar);
+        txt_buscar.setBounds(620, 178, 280, 30);
 
         rbtnG_periodoTiempo.add(rbtn_dia);
+        rbtn_dia.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        rbtn_dia.setForeground(new java.awt.Color(255, 255, 255));
         rbtn_dia.setText("Este día");
+        rbtn_dia.setMinimumSize(new java.awt.Dimension(85, 28));
+        rbtn_dia.setPreferredSize(new java.awt.Dimension(85, 28));
+        getContentPane().add(rbtn_dia);
+        rbtn_dia.setBounds(320, 710, 150, 28);
 
+        rbtnG_periodoTiempo.add(rbtn_semana);
+        rbtn_semana.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        rbtn_semana.setForeground(new java.awt.Color(255, 255, 255));
+        rbtn_semana.setText("Esta semana");
+        rbtn_semana.setMinimumSize(new java.awt.Dimension(85, 28));
+        rbtn_semana.setPreferredSize(new java.awt.Dimension(85, 28));
+        getContentPane().add(rbtn_semana);
+        rbtn_semana.setBounds(170, 710, 140, 30);
+
+        rbtnG_periodoTiempo.add(rbtn_mes);
+        rbtn_mes.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        rbtn_mes.setForeground(new java.awt.Color(255, 255, 255));
+        rbtn_mes.setText("Este mes");
+        rbtn_mes.setPreferredSize(new java.awt.Dimension(102, 28));
+        getContentPane().add(rbtn_mes);
+        rbtn_mes.setBounds(40, 710, 110, 28);
+
+        lbl_totalMovimientos.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_totalMovimientos.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_totalMovimientos.setText("Total de Movimientos: $XXXX.xx");
+        lbl_totalMovimientos.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(lbl_totalMovimientos);
+        lbl_totalMovimientos.setBounds(542, 720, 560, 30);
 
-        btn_nuevaPartida.setText("Nueva Partida");
+        table_transaccionesRecientes.setModel(modeloTabla);
+        table_transaccionesRecientes.setRowHeight(25);
+        jScrollPane1.setViewportView(table_transaccionesRecientes);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(20, 320, 1070, 340);
+
+        btn_nuevaPartida.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_nuevaPartida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_nuevaPartidaActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_nuevaPartida);
+        btn_nuevaPartida.setBounds(19, 162, 210, 60);
 
-        btn_buscar.setText("Buscar");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 925, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(rbtn_mes)
-                        .addGap(18, 18, 18)
-                        .addComponent(rbtn_semana)
-                        .addGap(18, 18, 18)
-                        .addComponent(rbtn_dia)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbl_totalMovimientos))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btn_nuevaPartida)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_buscar)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(76, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_buscar)
-                    .addComponent(btn_nuevaPartida))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rbtn_mes)
-                    .addComponent(rbtn_semana)
-                    .addComponent(rbtn_dia)
-                    .addComponent(lbl_totalMovimientos))
-                .addContainerGap())
-        );
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
+        lbl_finanzasEmpresa.setForeground(new java.awt.Color(255, 255, 255));
         lbl_finanzasEmpresa.setText("Finanzas de la Empresa (Inserte Nombre EMPRESA)");
+        lbl_finanzasEmpresa.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(lbl_finanzasEmpresa);
+        lbl_finanzasEmpresa.setBounds(10, 10, 640, 30);
 
+        lbl_empresa.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_empresa.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_empresa.setText("(Inserte Nombre EMPRESA)");
+        lbl_empresa.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(lbl_empresa);
+        lbl_empresa.setBounds(680, 10, 430, 30);
 
-        lbl_bienvenida.setText("Bienvenido (Nombre del usuario)");
+        lbl_bienvenida.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        lbl_bienvenida.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_bienvenida.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_bienvenida.setText("Has iniciado sesión como:");
         lbl_bienvenida.setToolTipText("");
+        getContentPane().add(lbl_bienvenida);
+        lbl_bienvenida.setBounds(670, 70, 440, 21);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lbl_finanzasEmpresa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbl_empresa))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lbl_bienvenida)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_finanzasEmpresa)
-                    .addComponent(lbl_empresa))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_bienvenida)
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
+        Lbl_Nombre_Usuario.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        Lbl_Nombre_Usuario.setForeground(new java.awt.Color(255, 255, 255));
+        Lbl_Nombre_Usuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        Lbl_Nombre_Usuario.setText("Cristian Cubias");
+        Lbl_Nombre_Usuario.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(Lbl_Nombre_Usuario);
+        Lbl_Nombre_Usuario.setBounds(670, 95, 440, 20);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/PanelPrincipal.png"))); // NOI18N
+        jLabel1.setMaximumSize(new java.awt.Dimension(1500, 1500));
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1130, 750);
+
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(96, 25));
 
         bMenu_archivo.setText("Archivo");
 
@@ -273,21 +356,6 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1.add(bMenu_vista);
 
         setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -342,19 +410,19 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Lbl_Nombre_Usuario;
     private javax.swing.JMenu bMenu_archivo;
     private javax.swing.JMenu bMenu_vista;
     private javax.swing.JMenuItem btnM_salir;
     private javax.swing.JButton btn_buscar;
     private javax.swing.JButton btn_nuevaPartida;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_bienvenida;
     private javax.swing.JLabel lbl_empresa;
