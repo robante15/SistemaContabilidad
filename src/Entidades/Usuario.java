@@ -14,7 +14,7 @@ public class Usuario {
     private int id;
     private String nombres;
     private String apellidos;
-    private String empresa;
+    private int empresa;
     private String usuario;
     private String contrasena;
     private String correo;
@@ -22,7 +22,7 @@ public class Usuario {
     private int codEmpleado;
     private String rol;
 
-    public Usuario(int id, String nombres, String apellidos, String empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
+    public Usuario(int id, String nombres, String apellidos, int empresa, String usuario, String contrasena, String correo, int telefono, int codEmpleado, String rol) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -59,11 +59,11 @@ public class Usuario {
         this.apellidos = apellidos;
     }
 
-    public String getEmpresa() {
+    public int getEmpresa() {
         return empresa;
     }
 
-    public void setEmpresa(String empresa) {
+    public void setEmpresa(int empresa) {
         this.empresa = empresa;
     }
 

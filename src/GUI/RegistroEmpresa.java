@@ -149,11 +149,11 @@ public class RegistroEmpresa extends javax.swing.JFrame {
         });
         getContentPane().setLayout(null);
         getContentPane().add(txt_nombreEmpresa);
-        txt_nombreEmpresa.setBounds(308, 222, 290, 24);
+        txt_nombreEmpresa.setBounds(308, 222, 290, 20);
         getContentPane().add(txt_fechaConstitucion);
-        txt_fechaConstitucion.setBounds(308, 313, 290, 24);
+        txt_fechaConstitucion.setBounds(308, 313, 290, 20);
         getContentPane().add(txt_formaJuridica);
-        txt_formaJuridica.setBounds(308, 264, 290, 24);
+        txt_formaJuridica.setBounds(308, 264, 290, 20);
 
         txtA_direccion.setColumns(1);
         txtA_direccion.setLineWrap(true);
@@ -163,15 +163,15 @@ public class RegistroEmpresa extends javax.swing.JFrame {
         getContentPane().add(jScrollPane2);
         jScrollPane2.setBounds(310, 350, 290, 60);
         getContentPane().add(txt_correo);
-        txt_correo.setBounds(308, 437, 290, 24);
+        txt_correo.setBounds(308, 437, 290, 20);
         getContentPane().add(txt_numeroRegistro);
-        txt_numeroRegistro.setBounds(308, 479, 290, 24);
+        txt_numeroRegistro.setBounds(308, 479, 290, 20);
         getContentPane().add(txt_telefono);
-        txt_telefono.setBounds(308, 521, 290, 24);
+        txt_telefono.setBounds(308, 521, 290, 20);
         getContentPane().add(txt_dueno);
-        txt_dueno.setBounds(308, 564, 290, 24);
+        txt_dueno.setBounds(308, 564, 290, 20);
         getContentPane().add(txt_sectorActividad);
-        txt_sectorActividad.setBounds(308, 606, 290, 24);
+        txt_sectorActividad.setBounds(308, 606, 290, 20);
 
         txtA_resumenNegocio.setColumns(1);
         txtA_resumenNegocio.setLineWrap(true);
@@ -225,7 +225,7 @@ public class RegistroEmpresa extends javax.swing.JFrame {
         String sector_actividad = this.txt_sectorActividad.getText();
         String resumen_negocio = this.txtA_resumenNegocio.getText();
 
-        Empresa empresaOBJ = factory.empresa(nomre_empresa, forma_juridica, fecha_constitucion, direccion, correo, registro_legal, telefono, dueno, sector_actividad, resumen_negocio);
+        Empresa empresaOBJ = factory.empresa(0, nomre_empresa, forma_juridica, fecha_constitucion, direccion, correo, registro_legal, telefono, dueno, sector_actividad, resumen_negocio);
 
         BaseDatos baseDatos = factory.baseDatos();
         baseDatos.registrarEmpresa(empresaOBJ);

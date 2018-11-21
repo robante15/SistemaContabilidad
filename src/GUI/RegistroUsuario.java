@@ -146,14 +146,14 @@ public class RegistroUsuario extends javax.swing.JFrame {
         });
         getContentPane().setLayout(null);
         getContentPane().add(txt_nombres);
-        txt_nombres.setBounds(158, 213, 290, 24);
+        txt_nombres.setBounds(158, 213, 290, 20);
         getContentPane().add(txt_apellidos);
-        txt_apellidos.setBounds(158, 255, 290, 24);
+        txt_apellidos.setBounds(158, 255, 290, 20);
 
         getContentPane().add(cbox_empresa);
-        cbox_empresa.setBounds(160, 303, 280, 26);
+        cbox_empresa.setBounds(160, 303, 280, 20);
         getContentPane().add(txt_usuario);
-        txt_usuario.setBounds(158, 339, 290, 24);
+        txt_usuario.setBounds(158, 339, 290, 20);
 
         btn_agregarEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_agregarEmpresa.setOpaque(false);
@@ -165,17 +165,17 @@ public class RegistroUsuario extends javax.swing.JFrame {
         getContentPane().add(btn_agregarEmpresa);
         btn_agregarEmpresa.setBounds(450, 300, 40, 30);
         getContentPane().add(txt_contrasena);
-        txt_contrasena.setBounds(158, 387, 290, 22);
+        txt_contrasena.setBounds(158, 387, 290, 20);
         getContentPane().add(txt_correo);
-        txt_correo.setBounds(158, 428, 290, 24);
+        txt_correo.setBounds(158, 428, 290, 20);
         getContentPane().add(txt_telefono);
-        txt_telefono.setBounds(158, 474, 290, 24);
+        txt_telefono.setBounds(158, 474, 290, 20);
         getContentPane().add(txt_codEmpleado);
-        txt_codEmpleado.setBounds(158, 544, 290, 24);
+        txt_codEmpleado.setBounds(158, 544, 290, 20);
 
         cbox_rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empresario", "Contador", "Auditor" }));
         getContentPane().add(cbox_rol);
-        cbox_rol.setBounds(160, 590, 190, 26);
+        cbox_rol.setBounds(160, 590, 190, 20);
 
         btn_cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_cancelar.setOpaque(false);
@@ -212,9 +212,10 @@ public class RegistroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void btn_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registroActionPerformed
+        BaseDatos baseDatos = factory.baseDatos();
         String nombres;
         String apellidos;
-        String empresa;
+        int empresa;
         String usuario;
         String contrasena;
         String correo;
@@ -224,7 +225,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         nombres = this.txt_nombres.getText();
         apellidos = this.txt_apellidos.getText();
-        empresa = this.cbox_empresa.getItemAt(this.cbox_empresa.getSelectedIndex());
+        empresa = baseDatos.obtenerEmpresa_SegunNombre(this.cbox_empresa.getItemAt(this.cbox_empresa.getSelectedIndex())).getId();
         usuario = this.txt_usuario.getText();
         contrasena = String.valueOf(this.txt_contrasena.getPassword());
         correo = this.txt_correo.getText();
@@ -234,7 +235,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
         Usuario usuarioOBJ = factory.usuario(0, nombres, apellidos, empresa, usuario, contrasena, correo, telefono, codEmpleado, rol);
 
-        BaseDatos baseDatos = factory.baseDatos();
+
         baseDatos.registrarUsuario(usuarioOBJ);
     }//GEN-LAST:event_btn_registroActionPerformed
 
@@ -246,10 +247,10 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
     private void apertura(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_apertura
         BaseDatos base = factory.baseDatos();
-        ArrayList<String> tipoGasto = base.listarEmpresas();
+        ArrayList<String> listaEmpresas = base.listarEmpresas();
         this.cbox_empresa.removeAllItems();
-        for(int i=0; i<tipoGasto.size(); i++){
-             this.cbox_empresa.addItem(tipoGasto.get(i));
+        for(int i=0; i<listaEmpresas.size(); i++){
+             this.cbox_empresa.addItem(listaEmpresas.get(i));
         }
     }//GEN-LAST:event_apertura
 

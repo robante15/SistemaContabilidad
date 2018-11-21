@@ -34,17 +34,17 @@ public class Principal extends javax.swing.JFrame {
         factory = new Factory();
         cargarColumnasTabla();
         cargarModeloTabla();
-        this.lbl_empresa.setText(usuario.getEmpresa());
+        BaseDatos base = factory.baseDatos();
+        this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
         this.lbl_bienvenida.setText("Bienvenido " + usuario.getNombres());
-        this.lbl_finanzasEmpresa.setText("Finanzas de " + usuario.getEmpresa());
+        this.lbl_finanzasEmpresa.setText("Finanzas de " + base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
 
     /*
     Este metodo define las columnas que va a tener la tabla
-    */
-    
+     */
     private void cargarColumnasTabla() {
 
         modeloTabla.addColumn("Partida N°");
@@ -54,11 +54,10 @@ public class Principal extends javax.swing.JFrame {
         modeloTabla.addColumn("Fecha");
     }
 
-    
     /*
     Este metodo lo que hace es traer un array de transacciones desde la Base de Datos,
     y mostrarla de manera ordenada en la tabla de la pantalla principal
-    */
+     */
     private void cargarModeloTabla() {
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         BaseDatos base = factory.baseDatos();
@@ -105,7 +104,7 @@ public class Principal extends javax.swing.JFrame {
         rbtnG_periodoTiempo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table_transaccionesRecientes = new javax.swing.JTable();
         rbtn_mes = new javax.swing.JRadioButton();
         rbtn_semana = new javax.swing.JRadioButton();
         rbtn_dia = new javax.swing.JRadioButton();
@@ -130,8 +129,8 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(modeloTabla);
-        jScrollPane1.setViewportView(jTable1);
+        table_transaccionesRecientes.setModel(modeloTabla);
+        jScrollPane1.setViewportView(table_transaccionesRecientes);
 
         rbtnG_periodoTiempo.add(rbtn_mes);
         rbtn_mes.setText("Este mes");
@@ -249,6 +248,11 @@ public class Principal extends javax.swing.JFrame {
         bMenu_vista.setText("Vista");
 
         menu_libroDiario.setText("Libro Diario");
+        menu_libroDiario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_libroDiarioActionPerformed(evt);
+            }
+        });
         bMenu_vista.add(menu_libroDiario);
 
         jMenuItem2.setText("Libro Mayor");
@@ -296,6 +300,11 @@ public class Principal extends javax.swing.JFrame {
     private void btnM_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnM_salirActionPerformed
         System.exit(0);
     }//GEN-LAST:event_btnM_salirActionPerformed
+
+    private void menu_libroDiarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_libroDiarioActionPerformed
+        LibroDiario libroDiario = factory.libroDiario();
+        libroDiario.setVisible(true);
+    }//GEN-LAST:event_menu_libroDiarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,7 +356,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbl_bienvenida;
     private javax.swing.JLabel lbl_empresa;
     private javax.swing.JLabel lbl_finanzasEmpresa;
@@ -357,6 +365,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbtn_dia;
     private javax.swing.JRadioButton rbtn_mes;
     private javax.swing.JRadioButton rbtn_semana;
+    private javax.swing.JTable table_transaccionesRecientes;
     private javax.swing.JTextField txt_buscar;
     // End of variables declaration//GEN-END:variables
 }

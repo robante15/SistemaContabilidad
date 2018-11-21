@@ -10,7 +10,8 @@ package Entidades;
  * @author roban
  */
 public class Empresa {
-    private String nomre_empresa;
+    private int id;
+    private String nombre_empresa;
     private String forma_juridica;
     private String fecha_constitucion;
     private String direccion;
@@ -21,8 +22,9 @@ public class Empresa {
     private String sector_actividad;
     private String resumen_negocio;
 
-    public Empresa(String nomre_empresa, String forma_juridica, String fecha_constitucion, String direccion, String correo, String registro_legal, int telefono, String dueno, String sector_actividad, String resumen_negocio) {
-        this.nomre_empresa = nomre_empresa;
+    public Empresa(int id, String nomre_empresa, String forma_juridica, String fecha_constitucion, String direccion, String correo, String registro_legal, int telefono, String dueno, String sector_actividad, String resumen_negocio) {
+        this.id = id;
+        this.nombre_empresa = nomre_empresa;
         this.forma_juridica = forma_juridica;
         this.fecha_constitucion = fecha_constitucion;
         this.direccion = direccion;
@@ -34,20 +36,20 @@ public class Empresa {
         this.resumen_negocio = resumen_negocio;
     }
 
-    public String getResumen_negocio() {
-        return resumen_negocio;
+    public int getId() {
+        return id;
     }
 
-    public void setResumen_negocio(String resumen_negocio) {
-        this.resumen_negocio = resumen_negocio;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNomre_empresa() {
-        return nomre_empresa;
+        return nombre_empresa;
     }
 
     public void setNomre_empresa(String nomre_empresa) {
-        this.nomre_empresa = nomre_empresa;
+        this.nombre_empresa = nomre_empresa;
     }
 
     public String getForma_juridica() {
@@ -113,4 +115,13 @@ public class Empresa {
     public void setSector_actividad(String sector_actividad) {
         this.sector_actividad = sector_actividad;
     }
+
+    public String getResumen_negocio() {
+        return resumen_negocio;
+    }
+
+    public void setResumen_negocio(String resumen_negocio) {
+        this.resumen_negocio = resumen_negocio;
+    }
+
 }

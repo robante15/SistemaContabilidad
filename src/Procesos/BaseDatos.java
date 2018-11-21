@@ -251,7 +251,7 @@ public class BaseDatos {
                 int id = rs.getInt("id");
                 String nombres = rs.getString("nombre");
                 String apellidos = rs.getString("apellido");
-                String empresa = rs.getString("empresa");
+                int empresa = rs.getInt("empresa");
                 String userName = rs.getString("usuario");
                 String contrasena = null;
                 String correo = rs.getString("correo");
@@ -312,6 +312,161 @@ public class BaseDatos {
     }
 
     //Retorna un objeto de tipo cuenta según el nombre de cuenta que uno le ingrese, es utilizado a la hora de relacionar las partidas, con las transacciones
+    public String obtenerNombreCuentaSegunID(int idCuenta) {
+        factory = new Factory();
+        String nombre_cuenta = null;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT nombre_cuenta FROM cuentas WHERE id = " + idCuenta + "";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                nombre_cuenta = rs.getString("nombre_cuenta");
+
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return nombre_cuenta;
+    }
+
+    //Retorna un objeto empresa, especificando el nombre de la empresa
+    public Empresa obtenerEmpresa_SegunNombre(String nombre_empresa) {
+        factory = new Factory();
+        Empresa empresa = null;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM empresas WHERE nombre_empresa='" + nombre_empresa + "'";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String nomre_empresa = rs.getString("nombre_empresa");
+                String forma_juridica = rs.getString("forma_juridica");
+                String fecha_constitucion = rs.getString("fecha_constitucion");
+                String direccion = rs.getString("direccion");
+                String correo = rs.getString("correo");
+                String registro_legal = rs.getString("registro_legal");
+                int telefono = rs.getInt("telefono");
+                String dueno = rs.getString("dueno");
+                String sector_actividad = rs.getString("sector_actividad");
+                String resumen_negocio = rs.getString("resumen_negocio");
+
+                empresa = factory.empresa(id, nomre_empresa, forma_juridica, fecha_constitucion, direccion, correo, registro_legal, telefono, dueno, sector_actividad, resumen_negocio);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return empresa;
+    }
+
+    //Retorna un objeto empresa, especificando el ID de la empresa
+    public Empresa obtenerEmpresa_SegunID(int idEmpresa) {
+        factory = new Factory();
+        Empresa empresa = null;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * FROM empresas WHERE id=" + idEmpresa + "";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String nomre_empresa = rs.getString("nombre_empresa");
+                String forma_juridica = rs.getString("forma_juridica");
+                String fecha_constitucion = rs.getString("fecha_constitucion");
+                String direccion = rs.getString("direccion");
+                String correo = rs.getString("correo");
+                String registro_legal = rs.getString("registro_legal");
+                int telefono = rs.getInt("telefono");
+                String dueno = rs.getString("dueno");
+                String sector_actividad = rs.getString("sector_actividad");
+                String resumen_negocio = rs.getString("resumen_negocio");
+
+                empresa = factory.empresa(id, nomre_empresa, forma_juridica, fecha_constitucion, direccion, correo, registro_legal, telefono, dueno, sector_actividad, resumen_negocio);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return empresa;
+    }
+
+    //Obtiene la cantidad de transacciones que tiene una partida segun su ID
+    public int cantidadTransaccionesSegunPartida(int idPartida) {
+        int cantidadTransacciones = 0;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT COUNT(id)\n"
+                    + "FROM transacciones\n"
+                    + "WHERE idPartida = " + idPartida + "";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                cantidadTransacciones = rs.getInt(1);
+
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return cantidadTransacciones;
+    }
+
+    //Retorna un objeto de tipo cuenta según el nombre de cuenta que uno le ingrese, es utilizado a la hora de relacionar las partidas, con las transacciones
     public Partida obtenerPartida(int partidaID) {
         factory = new Factory();
         Partida partida = null;
@@ -329,13 +484,15 @@ public class BaseDatos {
             while (rs.next()) {
 
                 int id = rs.getInt("id");
+                int empresaID = rs.getInt("empresaID");
+                int usuarioID = rs.getInt("usuarioID");
                 int numPartida = rs.getInt("numPartida");
                 String fecha = rs.getString("fecha");
                 String descripcion = rs.getString("descripcion");
                 float totalIngresos = rs.getFloat("totalIngresos");
                 float totalEgresos = rs.getFloat("totalEgresos");
 
-                partida = factory.partida(id, numPartida, fecha, descripcion, totalIngresos, totalEgresos);
+                partida = factory.partida(id, empresaID, usuarioID, numPartida, fecha, descripcion, totalIngresos, totalEgresos);
             }
 
         } catch (SQLException ex) {
@@ -348,6 +505,93 @@ public class BaseDatos {
             }
         }
         return partida;
+    }
+
+    //Retorna un array con las transacciones realizadas por una empresa determinada
+    public ArrayList<Transaccion> obtenerTransacciones_SegunEmpresa(int empresaID) {
+        factory = new Factory();
+        ArrayList<Transaccion> TransaccionesSegunEmpresa = new ArrayList<Transaccion>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT transacciones.id, transacciones.idPartida, transacciones.cuenta, transacciones.transaccionIngreso, transacciones.transaccionEgresos\n"
+                    + "FROM transacciones \n"
+                    + "JOIN partidas ON transacciones.idPartida = partidas.id\n"
+                    + "WHERE partidas.empresaID = " + empresaID + "\n"
+                    + "ORDER BY transacciones.idPartida ASC";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                int idPartida = rs.getInt("idPartida");
+                int cuenta = rs.getInt("cuenta");
+                float trasaccionIngreso = rs.getFloat("transaccionIngreso");
+                float transaccionEgresos = rs.getFloat("transaccionEgresos");
+
+                Transaccion transaccionOBJ = factory.transaccion(id, idPartida, cuenta, trasaccionIngreso, transaccionEgresos);
+
+                TransaccionesSegunEmpresa.add(transaccionOBJ);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return TransaccionesSegunEmpresa;
+    }
+
+    //Retorna un array con las partidas realizadas por una empresa determinada
+    public ArrayList<Partida> obtenerPartidas_SegunEmpresa(int empresaID) {
+        factory = new Factory();
+        ArrayList<Partida> ListadoPartidas = new ArrayList<Partida>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT * \n"
+                    + "FROM partidas\n"
+                    + "WHERE empresaID = " + empresaID + "";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                int IDempresa = rs.getInt("empresaID");
+                int usuarioID = rs.getInt("usuarioID");
+                int numPartida = rs.getInt("numPartida");
+                String fecha = rs.getString("fecha");
+                String descripcion = rs.getString("descripcion");
+                float totalIngresos = rs.getFloat("totalIngresos");
+                float totalEgresos = rs.getFloat("totalEgresos");
+
+                Partida partidaOBJ = factory.partida(id, empresaID, usuarioID, numPartida, fecha, descripcion, totalIngresos, totalEgresos);
+
+                ListadoPartidas.add(partidaOBJ);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return ListadoPartidas;
     }
 
     //Retorna un array de transacciones realizadas y la fecha de realización
@@ -386,7 +630,8 @@ public class BaseDatos {
                     date = format.parse(fecha);
 
                 } catch (ParseException ex) {
-                    Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(BaseDatos.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
 
                 DateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
@@ -553,7 +798,7 @@ public class BaseDatos {
 
             st.setString(1, usuario.getNombres());
             st.setString(2, usuario.getApellidos());
-            st.setString(3, usuario.getEmpresa());
+            st.setInt(3, usuario.getEmpresa());
             st.setString(4, usuario.getUsuario());
             st.setString(5, usuario.getContrasena());
             st.setString(6, usuario.getCorreo());
