@@ -595,7 +595,7 @@ public class BaseDatos {
     }
 
     //Retorna un array de transacciones realizadas y la fecha de realización
-    public ArrayList<TransaccionPopulada> obtenerTransaccionesTODOS() {
+    public ArrayList<TransaccionPopulada> obtenerTransaccionesTODOS(int empresaID) {
         factory = new Factory();
         ArrayList<TransaccionPopulada> todasTransacciones = new ArrayList<TransaccionPopulada>();
         try {
@@ -606,9 +606,9 @@ public class BaseDatos {
             }
             String SQLQuery = "SELECT transacciones.*, partidas.fecha, partidas.numPartida, cuentas.nombre_cuenta\n"
                     + "FROM transacciones \n"
-                    + "JOIN partidas ON transacciones.idPartida = partidas.id\n"
-                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id\n"
-                    + "ORDER BY partidas.fecha DESC ";
+                    + "JOIN partidas ON transacciones.idPartida = partidas.id \n"
+                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id \n"
+                    + "WHERE transacciones.empresaID = '" + empresaID + "' ORDER BY partidas.fecha DESC ";
             st = connect.prepareStatement(SQLQuery);
             rs = st.executeQuery();
 
@@ -674,9 +674,9 @@ public class BaseDatos {
 
             while (rs.next()) {
 
-                String nombre_empresa = rs.getString("nombre_cuenta");
+                String nombre_cuenta = rs.getString("nombre_cuenta");
 
-                listaCuentas.add(nombre_empresa);
+                listaCuentas.add(nombre_cuenta);
             }
 
         } catch (SQLException ex) {
@@ -689,6 +689,45 @@ public class BaseDatos {
             }
         }
         return listaCuentas;
+    }
+    
+    /*
+    Este metodo lo que hace es devolver un array con el ID DE CUENTA Y NOMBRE de todas las cuentas que hay registradas, esto sirve para mostrarlas en la tabla
+    del LIBRO MAYOR
+     */
+    public ArrayList<String> listarCuentasLM() {
+        factory = new Factory();
+        ArrayList<String> listaCuentasLM = new ArrayList<String>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT id, nombre_cuenta FROM cuentas ORDER BY nombre_cuenta ASC";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                String id_cuenta = String.valueOf(rs.getInt("id"));
+                String nombre_cuenta = rs.getString("nombre_cuenta");
+
+                listaCuentasLM.add(id_cuenta);
+                listaCuentasLM.add(nombre_cuenta);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaCuentasLM;
     }
 
     /*

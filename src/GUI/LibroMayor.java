@@ -5,6 +5,12 @@
  */
 package GUI;
 
+import Entidades.Usuario;
+import Factory.Factory;
+import Procesos.BaseDatos;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Cristian Cubias
@@ -14,8 +20,68 @@ public class LibroMayor extends javax.swing.JFrame {
     /**
      * Creates new form LibroMayor
      */
+    private static Factory factory;
+    static Usuario usuario;
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+    
     public LibroMayor() {
         initComponents();
+        factory = new Factory();
+        
+        /* CARGA DE DATOS */
+        
+        //Agregamos las columnas a la tabla
+        modeloTabla.addColumn("ID cuenta");
+        modeloTabla.addColumn("Cuenta");
+        modeloTabla.addColumn("Debe");
+        modeloTabla.addColumn("Haber");
+        modeloTabla.addColumn("Saldo");
+        
+        //Agregamos las filas a la tabla
+        
+       BaseDatos base = factory.baseDatos();
+       ArrayList<String> Listado = base.listarCuentasLM();
+       modeloTabla.setNumRows((Listado.size() / 2) + 1);
+       int Contador = 0;
+       int ContadorAUX = 0;
+       Boolean AgregadaEyE = false;
+       
+       for(int i = 0; Contador < Listado.size(); i++)
+       {
+            ContadorAUX = i + 1;
+            OUTER:
+            for (int j = 0; j < 2; j++) {     
+                
+                switch (Listado.get(Contador).toUpperCase()) {
+                    case "CAJA":
+                    case "BANCO":
+                    case "CUENTA CORRIENTE":
+                        if (!AgregadaEyE) {
+                            AgregadaEyE = true;
+                            modeloTabla.setValueAt("--", i, 0);
+                            modeloTabla.setValueAt("Efectivo y equivalentes", i, 1);
+                            Contador++;
+                            break OUTER;
+                        } else {
+                            Contador++;
+                            i--;
+                            break OUTER;
+                        }
+                    case "IVA POR PAGAR":
+                    case "REMANENTE DE IVA":
+                        Contador++;
+                        i--;
+                        break OUTER;
+                    default:
+                        modeloTabla.setValueAt(Listado.get(Contador), i, j);
+                        Contador++;
+                        break;      
+                }
+            }
+       }
+       modeloTabla.setNumRows(ContadorAUX + 1);
+       modeloTabla.setValueAt("Total: ", ContadorAUX, 0);
+       
     }
 
     /**
@@ -32,17 +98,7 @@ public class LibroMayor extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "No. de cuenta", "Descripción", "Debe", "Haber", "Saldo"
-            }
-        ));
+        jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -56,10 +112,10 @@ public class LibroMayor extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(162, 162, 162)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(172, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addGap(149, 149, 149))
         );
 
         pack();

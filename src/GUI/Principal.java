@@ -33,18 +33,19 @@ import javax.swing.table.DefaultTableModel;
 public class Principal extends javax.swing.JFrame {
 
     private static Factory factory;
-    static Usuario usuario;
+    static Usuario USUARIO;
 
     /**
      * Creates new form Principal
      */
     public Principal(Usuario usuario) {
         initComponents();
+        USUARIO = usuario;
         this.setLocationRelativeTo(null);
         factory = new Factory();
+        BaseDatos base = factory.baseDatos();
         cargarColumnasTabla();
         cargarModeloTabla();
-        BaseDatos base = factory.baseDatos();
         this.setTitle("Panel principal: [MODO " + usuario.getRol().toUpperCase() + "]");
         this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
         this.Lbl_Nombre_Usuario.setText(usuario.getUsuario());
@@ -154,8 +155,7 @@ public class Principal extends javax.swing.JFrame {
         BaseDatos base = factory.baseDatos();
         Fechas fechas = factory.fechas();
         RangoFecha rango = fechas.EsteMes();
-
-        ArrayList<TransaccionPopulada> listaTransacciones = base.obtenerTransaccionesTODOS();
+        ArrayList<TransaccionPopulada> listaTransacciones = base.obtenerTransaccionesTODOS(USUARIO.getEmpresa());
         int numeroTransacciones = listaTransacciones.size();
         modeloTabla.setNumRows(numeroTransacciones);
         Double totalIngresos = 0.0;
@@ -420,7 +420,7 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal(usuario).setVisible(true);
+                new Principal(USUARIO).setVisible(true);
             }
         });
     }
