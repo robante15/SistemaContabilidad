@@ -40,6 +40,14 @@ public class BaseDatos {
     Connection connect;
     PreparedStatement st = null;
     ResultSet rs = null;
+    
+    
+    //variables del usuario, estas permiten guardar los datos del usuario
+    String usu;
+    public int idusu;
+    public int idempre;
+    
+    
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -70,7 +78,12 @@ public class BaseDatos {
 
     public void close() {
         try {
+            
             connect.close();
+            usu = "";
+            idusu = 0;
+            idempre = 0;
+            
         } catch (SQLException ex) {
             //System.out.print(Conector.class.getName()).log(Level.SEVERE, null, ex);
             System.out.print("Error al cerrar la conexion");
@@ -111,6 +124,11 @@ public class BaseDatos {
 
             if (rs.next()) {
                 aproved = true;
+                
+                usu = rs.getString("usuario");
+                idusu = rs.getInt("id");
+                idempre = rs.getInt("empresa");
+                
             }
 
         } catch (SQLException ex) {
@@ -178,6 +196,31 @@ public class BaseDatos {
             System.out.println("Error al crear la tabla o que ya estaba creada");
         }
     }
+    
+    
+    public void crearTabla(String nombreTabla) throws SQLException {
+        try {
+            Statement sentencia = null;
+            sentencia = connect.createStatement();
+            String sql = "CREATE TABLE " + nombreTabla + " (\n"
+                    + "    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n"
+                    + "    nombre TEXT NOT NULL,\n"
+                    + "    apellido TEXT NOT NULL,\n"
+                    + "    empresa TEXT  NOT NULL,\n"
+                    + "    usuario TEXT NOT NULL,\n"
+                    + "    contrasena TEXT NOT NULL,\n"
+                    + "    correo TEXT NOT NULL,\n"
+                    + "    telefono INTEGER NOT NULL,\n"
+                    + "    codEmpleado INTEGER NOT NULL,\n"
+                    + "    rol TEXT NOT NULL);";
+            sentencia.execute(sql);
+            sentencia.close();
+            connect.close();
+            System.out.println("Exito al crear la tabla");
+        } catch (Exception e) {
+            System.out.println("Error al crear la tabla o que ya estaba creada");
+        }
+    }
 
     /*
     Este metodo crea una nueva tabla de empresas, no hace ninguna corrovoración de que si ya existe, debido a que si ya existe el SQL tirará un error
@@ -207,6 +250,7 @@ public class BaseDatos {
             System.out.println("Error al crear la tabla o que ya estaba creada");
         }
     }
+    
 
     /*
     Este metodo crea una nueva tabla de cuentas, no hace ninguna corrovoración de que si ya existe, debido a que si ya existe el SQL tirará un error
@@ -781,7 +825,7 @@ public class BaseDatos {
     public void registrarUsuario(Usuario usuario) {
 
         try {
-            this.crearTablaUsuario("usuarios");
+            this.crearTablaUsuario("partidas");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -855,5 +899,37 @@ public class BaseDatos {
             }
         }
     }
+    
+    //este metodo sirve para ingresar nueva partida a la base de datos.
+    public void nuevaPartida(Partida partida) throws SQLException{
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "INSERT INTO partidas (empresaID,usuarioID,numPartida,fecha,"
+                + "descripcion,totalingresos,totalegresos) VALUES (?,?,?,?,?,?,?)";
+            st = connect.prepareStatement(SQLQuery);
 
+            st.setInt(1, partida.getEmpresaID());
+            st.setInt(2, partida.getUsuarioID());
+            st.setInt(3, partida.getNumPartida());
+            st.setString(4, partida.getFecha());
+            st.setString(5, partida.getDescripcion());
+            st.setDouble(6, partida.getTotalIngresos());
+            st.setDouble(7, partida.getTotalEgresos());
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "PARTIDA GUARDADA");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }

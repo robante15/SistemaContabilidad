@@ -9,10 +9,14 @@ import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
 import static java.lang.Double.parseDouble;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,6 +29,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
      * Creates new form Principal
      */
     static Usuario usuario;
+    static String nuevafecha;
+    private String descripcion;
     private static Factory factory;
 
     public NuevaEntrada() {
@@ -42,7 +48,6 @@ public class NuevaEntrada extends javax.swing.JFrame {
      */
     private void cargarColumnasTabla() {
 
-        modeloTabla.addColumn("Fecha");
         modeloTabla.addColumn("Partida N°");
         modeloTabla.addColumn("Ingreso");
         modeloTabla.addColumn("Egreso");
@@ -54,7 +59,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
         java.util.Date fecha = new Date();
         int columnas = 1;
         modeloTabla.setNumRows(columnas);
-        modeloTabla.setValueAt(df.format(fecha), 0, 0);
+        fechaLB.setText("FECHA: " + df.format(fecha));
+        nuevafecha = df.format(fecha);
     }
 
     /**
@@ -98,6 +104,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
         descripcionTXT = new javax.swing.JTextArea();
         lbl_descripcion = new javax.swing.JLabel();
         btn_agregarCuenta = new javax.swing.JButton();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        fechaLB = new javax.swing.JLabel();
 
         jframe_agregarCuenta.setMinimumSize(new java.awt.Dimension(400, 425));
         jframe_agregarCuenta.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -221,6 +229,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 apertura(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -243,12 +252,20 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
         );
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1003, -1));
+
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         tabla_NuevaEntrada.setModel(modeloTabla);
         jScrollPane1.setViewportView(tabla_NuevaEntrada);
 
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 161, 983, 299));
+
         lbl_cuenta.setText("Cuenta");
+        jPanel2.add(lbl_cuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 15, -1, -1));
 
         cbox_cuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(cbox_cuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 12, 215, -1));
 
         btn_aceptar.setText("Aceptar");
         btn_aceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -256,6 +273,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 btn_aceptarActionPerformed(evt);
             }
         });
+        jPanel2.add(btn_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(922, 471, -1, -1));
 
         btn_cancelar.setText("Cancelar");
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -263,15 +281,20 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 btn_cancelarActionPerformed(evt);
             }
         });
+        jPanel2.add(btn_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(829, 471, -1, -1));
 
         lbl_monto.setText("Monto");
+        jPanel2.add(lbl_monto, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 67, -1, -1));
+        jPanel2.add(montoTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 64, 215, -1));
 
         rbtnG_ingresoEgreso.add(rbtn_ingreso);
         rbtn_ingreso.setSelected(true);
         rbtn_ingreso.setText("Ingreso");
+        jPanel2.add(rbtn_ingreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(396, 58, -1, -1));
 
         rbtnG_ingresoEgreso.add(rbtn_egreso);
         rbtn_egreso.setText("Egreso");
+        jPanel2.add(rbtn_egreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 58, -1, -1));
 
         btn_añadir.setText("Agregar");
         btn_añadir.addActionListener(new java.awt.event.ActionListener() {
@@ -279,12 +302,16 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 btn_añadirActionPerformed(evt);
             }
         });
+        jPanel2.add(btn_añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 102, -1, -1));
 
         descripcionTXT.setColumns(20);
         descripcionTXT.setRows(5);
         jScrollPane2.setViewportView(descripcionTXT);
 
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(639, 11, 260, -1));
+
         lbl_descripcion.setText("Descripción");
+        jPanel2.add(lbl_descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(567, 13, -1, -1));
 
         btn_agregarCuenta.setText("+");
         btn_agregarCuenta.addActionListener(new java.awt.event.ActionListener() {
@@ -292,92 +319,20 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 btn_agregarCuentaActionPerformed(evt);
             }
         });
+        jPanel2.add(btn_agregarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(337, 11, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btn_cancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_aceptar))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lbl_cuenta)
-                                    .addComponent(lbl_monto))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbox_cuentas, 0, 215, Short.MAX_VALUE)
-                                    .addComponent(montoTXT))
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_agregarCuenta))
-                            .addComponent(btn_añadir))
-                        .addGap(18, 18, 18)
-                        .addComponent(rbtn_ingreso)
-                        .addGap(31, 31, 31)
-                        .addComponent(rbtn_egreso)
-                        .addGap(18, 18, 18)
-                        .addComponent(lbl_descripcion)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 94, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbox_cuentas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_cuenta)
-                            .addComponent(btn_agregarCuenta))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_monto)
-                            .addComponent(montoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_añadir))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lbl_descripcion)
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rbtn_ingreso)
-                            .addComponent(rbtn_egreso)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_aceptar)
-                    .addComponent(btn_cancelar))
-                .addContainerGap())
-        );
+        try {
+            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####.##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel2.add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 170, 20));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        fechaLB.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        fechaLB.setText("jLabel2");
+        jPanel2.add(fechaLB, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 102, 250, 26));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 73, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -450,10 +405,11 @@ public class NuevaEntrada extends javax.swing.JFrame {
     }//GEN-LAST:event_focusGained
 
     private void btn_añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_añadirActionPerformed
+
         //añadir transacion a la tabla
         String cuenta = (String)cbox_cuentas.getSelectedItem(); //accede al tipo de cuenta
         double monto = parseDouble(montoTXT.getText()); //el monto a cargar 
-        String descripcion = descripcionTXT.getText(); //optiene la descripcion
+        descripcion = descripcionTXT.getText(); //optiene la descripcion
         boolean lado; //para saber si va en el debe o en el haber
         double debe = 0, haber = 0;
         if(rbtn_ingreso.isSelected()){
@@ -465,9 +421,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
             haber = monto;
         }
         
-        Object filaNueva[] = {null ,cuenta, debe, haber};
+        Object filaNueva[] = {cuenta, debe, haber};
         modeloTabla.addRow(filaNueva);
-        
     }//GEN-LAST:event_btn_añadirActionPerformed
 
     private void btn_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_aceptarActionPerformed
@@ -479,30 +434,40 @@ public class NuevaEntrada extends javax.swing.JFrame {
         double sumahaber =0;
         double sumatoria1 =0;
         
+        
         double ingresos, egresos;
         
         //suma toda la columa de los ingresos
         for(int i=1; i<tabla_NuevaEntrada.getRowCount(); i++){
-            sumatoria = parseDouble(tabla_NuevaEntrada.getValueAt(i, 2).toString());
+            sumatoria = parseDouble(tabla_NuevaEntrada.getValueAt(i, 1).toString());
             sumadebe += sumatoria;
         }
         ingresos = sumadebe;
         //suma toda la columna de los egresos
         for(int i=1; i<tabla_NuevaEntrada.getRowCount(); i++){
             
-            sumatoria1 = parseDouble(tabla_NuevaEntrada.getValueAt(i, 3).toString());
+            sumatoria1 = parseDouble(tabla_NuevaEntrada.getValueAt(i, 2).toString());
             sumahaber += sumatoria1;
         }
         egresos = sumahaber;
         
+        
         if(ingresos == egresos){
             System.out.print("son iguales");
+            JOptionPane.showMessageDialog(rootPane, "Cuadran los ingresos y egresos");
+            
+            Partida partidaOBJ = factory.partida(0 ,factory.baseDatos().idusu, factory.baseDatos().idempre, 3, nuevafecha, descripcion, (float)ingresos, (float) egresos);
+            try {
+                factory.baseDatos().nuevaPartida(partidaOBJ);
+            } catch (SQLException ex) {
+                Logger.getLogger(NuevaEntrada.class.getName()).log(Level.SEVERE, null, ex);
+            }   
         }
         else if(ingresos > egresos){
-            System.out.print("son mayores los ingresos");
+            JOptionPane.showMessageDialog(rootPane, "Son mayores los ingresos");
         }
         else{
-            System.out.print("son mayores los egresos");
+            JOptionPane.showMessageDialog(rootPane, "Son mayores los egresos");
         }
             
         
@@ -562,6 +527,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbox_clasificacionCuenta;
     private javax.swing.JComboBox<String> cbox_cuentas;
     private javax.swing.JTextArea descripcionTXT;
+    private javax.swing.JLabel fechaLB;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
