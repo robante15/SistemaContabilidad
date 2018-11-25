@@ -60,7 +60,7 @@ public class Usuario {
     }
 
     public int getEmpresa() {
-        return empresa;
+        return this.empresa;
     }
 
     public void setEmpresa(int empresa) {

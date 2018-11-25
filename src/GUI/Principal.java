@@ -33,18 +33,19 @@ import javax.swing.table.DefaultTableModel;
 public class Principal extends javax.swing.JFrame {
 
     private static Factory factory;
-    static Usuario usuario;
+    static Usuario USUARIO;
 
     /**
      * Creates new form Principal
      */
     public Principal(Usuario usuario) {
         initComponents();
+        USUARIO = usuario;
         this.setLocationRelativeTo(null);
         factory = new Factory();
+        BaseDatos base = factory.baseDatos();
         cargarColumnasTabla();
         cargarModeloTabla();
-        BaseDatos base = factory.baseDatos();
         this.setTitle("Panel principal: [MODO " + usuario.getRol().toUpperCase() + "]");
         this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
         this.Lbl_Nombre_Usuario.setText(usuario.getUsuario());
@@ -154,8 +155,7 @@ public class Principal extends javax.swing.JFrame {
         BaseDatos base = factory.baseDatos();
         Fechas fechas = factory.fechas();
         RangoFecha rango = fechas.EsteMes();
-
-        ArrayList<TransaccionPopulada> listaTransacciones = base.obtenerTransaccionesTODOS();
+        ArrayList<TransaccionPopulada> listaTransacciones = base.obtenerTransaccionesTODOS(USUARIO.getEmpresa());
         int numeroTransacciones = listaTransacciones.size();
         modeloTabla.setNumRows(numeroTransacciones);
         Double totalIngresos = 0.0;
@@ -212,7 +212,7 @@ public class Principal extends javax.swing.JFrame {
         btnM_salir = new javax.swing.JMenuItem();
         bMenu_vista = new javax.swing.JMenu();
         menu_libroDiario = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menu_libroMayor = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -330,6 +330,7 @@ public class Principal extends javax.swing.JFrame {
 
         bMenu_vista.setText("Vista");
 
+        menu_libroDiario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         menu_libroDiario.setText("Libro Diario");
         menu_libroDiario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -338,18 +339,28 @@ public class Principal extends javax.swing.JFrame {
         });
         bMenu_vista.add(menu_libroDiario);
 
-        jMenuItem2.setText("Libro Mayor");
-        bMenu_vista.add(jMenuItem2);
+        menu_libroMayor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        menu_libroMayor.setText("Libro Mayor");
+        menu_libroMayor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_libroMayorActionPerformed(evt);
+            }
+        });
+        bMenu_vista.add(menu_libroMayor);
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem3.setText("Ajuste de IVA");
         bMenu_vista.add(jMenuItem3);
 
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem5.setText("Balance de Comprobación");
         bMenu_vista.add(jMenuItem5);
 
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem4.setText("Estado de Resultados");
         bMenu_vista.add(jMenuItem4);
 
+        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem6.setText("Balance General");
         bMenu_vista.add(jMenuItem6);
 
@@ -373,6 +384,11 @@ public class Principal extends javax.swing.JFrame {
         LibroDiario libroDiario = factory.libroDiario();
         libroDiario.setVisible(true);
     }//GEN-LAST:event_menu_libroDiarioActionPerformed
+
+    private void menu_libroMayorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_libroMayorActionPerformed
+        LibroMayor libroMayor = factory.libroMayor();
+        libroMayor.setVisible(true);
+    }//GEN-LAST:event_menu_libroMayorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -404,7 +420,7 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal(usuario).setVisible(true);
+                new Principal(USUARIO).setVisible(true);
             }
         });
     }
@@ -418,7 +434,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btn_nuevaPartida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
@@ -429,6 +444,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_finanzasEmpresa;
     private javax.swing.JLabel lbl_totalMovimientos;
     private javax.swing.JMenuItem menu_libroDiario;
+    private javax.swing.JMenuItem menu_libroMayor;
     private javax.swing.ButtonGroup rbtnG_periodoTiempo;
     private javax.swing.JRadioButton rbtn_dia;
     private javax.swing.JRadioButton rbtn_mes;
