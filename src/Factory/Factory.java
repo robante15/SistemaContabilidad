@@ -37,8 +37,8 @@ public class Factory {
         return new LibroDiario();
     }
     
-    public LibroMayor libroMayor(){
-        return new LibroMayor();
+    public LibroMayor libroMayor(Usuario usuario){
+        return new LibroMayor(usuario);
     }
 
     public RegistroUsuario registroUsuario() {
