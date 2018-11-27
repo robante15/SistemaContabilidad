@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author roban
  */
 public class LibroDiario extends javax.swing.JFrame {
-    
+
     private static Factory factory;
 
     /**
@@ -32,22 +32,22 @@ public class LibroDiario extends javax.swing.JFrame {
         cargarColumnasTabla();
         cargarModeloTabla();
     }
-    
+
     DefaultTableModel modeloTabla = new DefaultTableModel();
-    
+
     private void cargarColumnasTabla() {
         modeloTabla.addColumn("Fecha");
         modeloTabla.addColumn("Partida N°");
         modeloTabla.addColumn("Ingreso");
         modeloTabla.addColumn("Egreso");
     }
-    
+
     private void cargarModeloTabla() {
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         BaseDatos base = factory.baseDatos();
         Fechas fechas = factory.fechas();
         RangoFecha rango = fechas.EsteMes();
-        
+
         ArrayList<Partida> listaPartidas = base.obtenerPartidas_SegunEmpresa(3);
         ArrayList<Transaccion> listaTransacciones = base.obtenerTransacciones_SegunEmpresa(3);
         int numFilas = listaPartidas.size() + listaPartidas.size() + listaTransacciones.size();
@@ -57,23 +57,23 @@ public class LibroDiario extends javax.swing.JFrame {
         int filaDetalles = 0;
         int filaTitulo = 0;
         int filaTransaccion = 1;
-        
+
         int[] cantidadTransaccionesPorPartida = new int[listaPartidas.size()];
-        
+
         for (int i = 0; i < listaPartidas.size(); i++) {
             Partida partidaOBJ = listaPartidas.get(i);
             cantidadTransaccionesPorPartida[i] = base.cantidadTransaccionesSegunPartida(partidaOBJ.getId());
         }
-        
+
         for (int i = 0; i < listaPartidas.size(); i++) {
-            
+
             Partida partidaOBJ = listaPartidas.get(i);
             String fecha = partidaOBJ.getFecha();
             int partidaNum = partidaOBJ.getNumPartida();
             String descripcion = partidaOBJ.getDescripcion();
             float totalIngresosPartida = partidaOBJ.getTotalIngresos();
             float totalEgresosPartida = partidaOBJ.getTotalEgresos();
-            
+
             filaDetalles = filaDetalles + 1 + cantidadTransaccionesPorPartida[i];
             //totalIngresos = totalIngresos + ingreso;
             //totalEgresos = totalEgresos + egreso;
@@ -86,34 +86,39 @@ public class LibroDiario extends javax.swing.JFrame {
             modeloTabla.setValueAt("$ " + totalEgresosPartida, filaDetalles, 3);
             filaDetalles++;
             filaTitulo = cantidadTransaccionesPorPartida[i] + filaTitulo + 2;
-            
+
         }
-        
-        int contadorParaArray = 0;
-        
+
+        int partidaAlmacenada = listaTransacciones.get(0).getIdPartida();
+
         for (int i = 0; i < listaTransacciones.size(); i++) {
-            
+
             Transaccion transaccionOBJ = listaTransacciones.get(i);
-            
+
+            int partida_actual = transaccionOBJ.getIdPartida();
+
+            if (partidaAlmacenada == partida_actual) {
+                partidaAlmacenada = partida_actual;
+            } else {
+                filaTransaccion = filaTransaccion + 2;
+                partidaAlmacenada = partida_actual;
+            }
+
             int cuenta = transaccionOBJ.getCuenta();
             float trasaccionIngreso = transaccionOBJ.getTrasaccionIngreso();
             float transaccionEgresos = transaccionOBJ.getTransaccionEgresos();
-            
-            if(transaccionOBJ.getTrasaccionIngreso() != 0.00){
+
+            //Si es de saldo acreedor o deudor lo que hace es añadir una tabulación para que se puedan distinguir
+            if (transaccionOBJ.getTrasaccionIngreso() != 0.00) {
                 modeloTabla.setValueAt(base.obtenerNombreCuentaSegunID(cuenta), filaTransaccion, 1);
-            }else{
-                modeloTabla.setValueAt("           "+base.obtenerNombreCuentaSegunID(cuenta), filaTransaccion, 1);
+            } else {
+                modeloTabla.setValueAt("           " + base.obtenerNombreCuentaSegunID(cuenta), filaTransaccion, 1);
             }
-            
+
             modeloTabla.setValueAt("$ " + trasaccionIngreso, filaTransaccion, 2);
             modeloTabla.setValueAt("$ " + transaccionEgresos, filaTransaccion, 3);
             filaTransaccion++;
-            
-            if (cantidadTransaccionesPorPartida[contadorParaArray] - 1 == i) {
-                filaTransaccion = filaTransaccion + 2;
-                contadorParaArray++;
-            }
-            
+
         }
         //this.lbl_totalMovimientos.setText("Total de Movimientos     Ingresos: $ " + (double) Math.round(totalIngresos * 100d) / 100d + "     Egresos: $" + (double) Math.round(totalEgresos * 100d) / 100d);
 
@@ -137,7 +142,7 @@ public class LibroDiario extends javax.swing.JFrame {
         tabla_partidas = new javax.swing.JTable();
         lbl_totalMovimientos = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lbl_libroDiario.setText("Libro Diario");
 
@@ -233,21 +238,21 @@ public class LibroDiario extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(LibroDiario.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(LibroDiario.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(LibroDiario.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(LibroDiario.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
