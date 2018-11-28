@@ -40,6 +40,15 @@ public class BaseDatos {
     Connection connect;
     PreparedStatement st = null;
     ResultSet rs = null;
+    
+    
+    //variables para el usuario
+    public static String usu;
+    public static int idusuario;
+    public static int idempresa;
+    
+    //para saber el numero de partida
+    int numeroPartida;
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -74,9 +83,71 @@ public class BaseDatos {
         } catch (SQLException ex) {
             //System.out.print(Conector.class.getName()).log(Level.SEVERE, null, ex);
             System.out.print("Error al cerrar la conexion");
+            usu = null;
+            idusuario = 0;
+            idempresa = 0;
+            numeroPartida = 0;
         }
     }
+    
+    public void numeroPartida() throws SQLException{
+        
+        String SSQL = "SELECT * FROM partidas";
+        connect = DriverManager.getConnection(url);
+        Statement st = connect.createStatement();
+        try {
+            int contador = 0;
+            ResultSet rs = st.executeQuery(SSQL);
+            
+            while(rs.next()){
+                contador += contador;
+            }
+            numeroPartida = contador;
+            
+        } catch (SQLException ex) {
+            System.out.println(ex + "Error de conexión");
+        }
+        
+    }
+    
 
+    //crear una nueva partida en la base de datos
+    public void nuevaPartida(Partida partida){
+        
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "INSERT INTO partidas (empresaID, usuarioID, numPartida, fecha,"
+                    + "descripcion, totalIngresos, totalEgresos) VALUES (?,?,?,?,?,?,?)";
+            st = connect.prepareStatement(SQLQuery);
+
+            st.setInt(1, partida.getUsuarioID());
+            st.setInt(2, partida.getUsuarioID());
+            st.setInt(3, partida.getNumPartida());
+            st.setString(4, partida.getFecha());
+            st.setString(5, partida.getDescripcion());
+            st.setFloat(6, partida.getTotalIngresos());
+            st.setFloat(7, partida.getTotalEgresos());
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Nueva partida agregada correctamente");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        
+    }
+    
+    
     //Crea la base de Datos (Comprobando primero que el directorio exista)
     public void crearBaseDatos() {
         this.verificarDirectorio();
@@ -111,6 +182,9 @@ public class BaseDatos {
 
             if (rs.next()) {
                 aproved = true;
+                usu = rs.getString("usuario");
+                idusuario = rs.getInt("id");
+                idempresa = rs.getInt("empresa");   
             }
 
         } catch (SQLException ex) {
@@ -812,13 +886,15 @@ public class BaseDatos {
 
     }
 
+    
     /*
-    Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los INGRESOS de la cuenta seleccionada, esto es para evitar escribir
-    código que haga la misma función.
+    Este metodo lo que hace es devolver un array con el ID DE CUENTA Y NOMBRE de todas las cuentas que hay registradas, esto sirve para mostrarlas en la tabla
+    del LIBRO MAYOR
      */
-    public String ObtenerIngresosDeCuenta(int empresaID, int cuentaID) {
+    public ArrayList<String> listarCuentasLM() {
         factory = new Factory();
         String SUM_Ingresos = "0.0";
+        ArrayList<String> listaCuentasLM = new ArrayList<String>();
         try {
             if (osName.equals("linux")) {
                 System.out.println("Este sistema esta diseñado para correr en Windows");
@@ -826,10 +902,8 @@ public class BaseDatos {
             } else {
                 connect = DriverManager.getConnection(url);
             }
-            String SQLQuery = "SELECT sum(transaccionIngreso) as Sumatoria from transacciones WHERE empresaID = ? AND cuenta = ?;";
+            String SQLQuery = "SELECT id, nombre_cuenta FROM cuentas ORDER BY nombre_cuenta ASC";
             st = connect.prepareStatement(SQLQuery);
-            st.setInt(1, empresaID);
-            st.setInt(2, cuentaID);
             rs = st.executeQuery();
 
             while (rs.next()) {
@@ -870,8 +944,11 @@ public class BaseDatos {
             rs = st.executeQuery();
 
             while (rs.next()) {
+                String id_cuenta = String.valueOf(rs.getInt("id"));
+                String nombre_cuenta = rs.getString("nombre_cuenta");
 
-                SUM_Egresos = String.valueOf(rs.getDouble("Sumatoria"));
+                listaCuentasLM.add(id_cuenta);
+                listaCuentasLM.add(nombre_cuenta);
             }
 
         } catch (SQLException ex) {
@@ -883,7 +960,7 @@ public class BaseDatos {
                 ex.printStackTrace();
             }
         }
-        return SUM_Egresos;
+        return listaCuentasLM;
     }
 
     /*

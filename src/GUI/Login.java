@@ -97,7 +97,7 @@ public class Login extends javax.swing.JFrame {
 
         txt_usuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         getContentPane().add(txt_usuario);
-        txt_usuario.setBounds(88, 147, 250, 28);
+        txt_usuario.setBounds(88, 147, 250, 26);
 
         txt_contrasena.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         getContentPane().add(txt_contrasena);
