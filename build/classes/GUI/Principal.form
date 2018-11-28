@@ -93,6 +93,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Balance General"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menu_balanceGeneralActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

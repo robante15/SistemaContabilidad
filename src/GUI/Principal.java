@@ -372,6 +372,11 @@ public class Principal extends javax.swing.JFrame {
 
         menu_balanceGeneral.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         menu_balanceGeneral.setText("Balance General");
+        menu_balanceGeneral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_balanceGeneralActionPerformed(evt);
+            }
+        });
         bMenu_vista.add(menu_balanceGeneral);
 
         jMenuBar1.add(bMenu_vista);
@@ -409,6 +414,11 @@ public class Principal extends javax.swing.JFrame {
         EstadoResultados estadoResultados = factory.estadoResultados(USUARIO);
         estadoResultados.setVisible(true);
     }//GEN-LAST:event_menu_estadoResultadosActionPerformed
+
+    private void menu_balanceGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_balanceGeneralActionPerformed
+        BalanceGeneral balanceGeneral = factory.balanceGeneral(USUARIO);
+        balanceGeneral.setVisible(true);
+    }//GEN-LAST:event_menu_balanceGeneralActionPerformed
 
     /**
      * @param args the command line arguments

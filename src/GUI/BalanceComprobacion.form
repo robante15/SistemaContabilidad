@@ -51,7 +51,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="472" max="-2" attributes="0"/>
-                          <Component id="lbl_nombreEmpresa" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbl_empresa" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="431" max="-2" attributes="0"/>
@@ -68,7 +68,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lbl_titulo" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="lbl_nombreEmpresa" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbl_empresa" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="lbl_periodoContable" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="25" max="32767" attributes="0"/>
@@ -82,7 +82,7 @@
             <Property name="text" type="java.lang.String" value="Balance de Comprobaci&#xf3;n"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lbl_nombreEmpresa">
+        <Component class="javax.swing.JLabel" name="lbl_empresa">
           <Properties>
             <Property name="text" type="java.lang.String" value="Empresa XXXX"/>
           </Properties>

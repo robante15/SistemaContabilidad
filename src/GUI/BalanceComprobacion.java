@@ -28,6 +28,8 @@ public class BalanceComprobacion extends javax.swing.JFrame {
         factory = new Factory();
         cargarColumnasTabla();
         cargarModeloTabla();
+        BaseDatos base = factory.baseDatos();
+        this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -83,7 +85,7 @@ public class BalanceComprobacion extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lbl_titulo = new javax.swing.JLabel();
-        lbl_nombreEmpresa = new javax.swing.JLabel();
+        lbl_empresa = new javax.swing.JLabel();
         lbl_periodoContable = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         table_balanceComprobacion = new javax.swing.JScrollPane();
@@ -93,7 +95,7 @@ public class BalanceComprobacion extends javax.swing.JFrame {
 
         lbl_titulo.setText("Balance de Comprobación");
 
-        lbl_nombreEmpresa.setText("Empresa XXXX");
+        lbl_empresa.setText("Empresa XXXX");
 
         lbl_periodoContable.setText("Periodo contable del XXX al XXX");
 
@@ -108,7 +110,7 @@ public class BalanceComprobacion extends javax.swing.JFrame {
                         .addComponent(lbl_titulo))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(472, 472, 472)
-                        .addComponent(lbl_nombreEmpresa))
+                        .addComponent(lbl_empresa))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(431, 431, 431)
                         .addComponent(lbl_periodoContable)))
@@ -120,7 +122,7 @@ public class BalanceComprobacion extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lbl_titulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_nombreEmpresa)
+                .addComponent(lbl_empresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbl_periodoContable)
                 .addContainerGap(25, Short.MAX_VALUE))
@@ -202,7 +204,7 @@ public class BalanceComprobacion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lbl_nombreEmpresa;
+    private javax.swing.JLabel lbl_empresa;
     private javax.swing.JLabel lbl_periodoContable;
     private javax.swing.JLabel lbl_titulo;
     private javax.swing.JTable tabla_balanceComprobacion;

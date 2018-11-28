@@ -7,6 +7,7 @@ package GUI;
 
 import Entidades.Usuario;
 import Factory.Factory;
+import static GUI.Principal.USUARIO;
 import Procesos.BaseDatos;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,10 +25,12 @@ public class EstadoResultados extends javax.swing.JFrame {
      */
     public EstadoResultados(Usuario usuario) {
         initComponents();
-        this.setLocationRelativeTo(null);
         factory = new Factory();
+        this.setLocationRelativeTo(null);
         cargarColumnasTabla();
         cargarModeloTabla();
+        BaseDatos base = factory.baseDatos();
+        this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -83,7 +86,7 @@ public class EstadoResultados extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lbl_titulo = new javax.swing.JLabel();
-        lbl_tituloEmpresa = new javax.swing.JLabel();
+        lbl_empresa = new javax.swing.JLabel();
         lbl_periodo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -93,7 +96,7 @@ public class EstadoResultados extends javax.swing.JFrame {
 
         lbl_titulo.setText("Estado de Resultados");
 
-        lbl_tituloEmpresa.setText("Empresa XXXX");
+        lbl_empresa.setText("Empresa XXXX");
 
         lbl_periodo.setText("Periodo Contable del XXX al XXX");
 
@@ -109,7 +112,7 @@ public class EstadoResultados extends javax.swing.JFrame {
                             .addComponent(lbl_titulo)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(lbl_tituloEmpresa))))
+                                .addComponent(lbl_empresa))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(473, 473, 473)
                         .addComponent(lbl_periodo)))
@@ -121,7 +124,7 @@ public class EstadoResultados extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lbl_titulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_tituloEmpresa)
+                .addComponent(lbl_empresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbl_periodo)
                 .addContainerGap(25, Short.MAX_VALUE))
@@ -205,8 +208,8 @@ public class EstadoResultados extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_empresa;
     private javax.swing.JLabel lbl_periodo;
     private javax.swing.JLabel lbl_titulo;
-    private javax.swing.JLabel lbl_tituloEmpresa;
     // End of variables declaration//GEN-END:variables
 }
