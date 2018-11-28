@@ -8,9 +8,17 @@ package GUI;
 import Entidades.Usuario;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +38,8 @@ public class LibroMayor extends javax.swing.JFrame {
         initComponents();
         USUARIO = usuario;
         factory = new Factory();
+        this.setLocationRelativeTo(null);
+        this.setTitle("Libro mayor");
         
         /* CARGA DE DATOS */
         
@@ -61,6 +71,12 @@ public class LibroMayor extends javax.swing.JFrame {
        Double IngresoTotal = 0.0;
        Double EgresoTotal = 0.0;
        Boolean AgregadaEyE = false;
+       
+       Double CFI_IN = 0.0;
+       Double CFI_EG = 0.0;
+       Double DFI_IN = 0.0;
+       Double DFI_EG = 0.0;
+       Double IVA_TOTAL = 0.0;
        
        modeloTabla.setRowCount(Listado.size() );
        
@@ -172,11 +188,22 @@ public class LibroMayor extends javax.swing.JFrame {
            
             if(!"--".equals((String)modeloTabla.getValueAt(i, 0)))
             {
-                Ingreso = Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf((String)modeloTabla.getValueAt(i, 0))));
-                Egreso =  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf((String)modeloTabla.getValueAt(i, 0))));
-                Saldo =  Ingreso - Egreso;
+                Ingreso = (double) Math.round(Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf((String)modeloTabla.getValueAt(i, 0)))));
+                Egreso =  (double) Math.round(Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf((String)modeloTabla.getValueAt(i, 0)))));
+                Saldo =  (double) Math.round(Ingreso - Egreso);
                 
                 
+                if(((String)modeloTabla.getValueAt(i, 1)).equals("Credito Fiscal IVA"))
+                {
+                    CFI_IN = Ingreso;
+                    CFI_EG = Egreso;
+                }
+                else if(((String)modeloTabla.getValueAt(i, 1)).equals("Debito Fiscal IVA"))
+                {
+                    DFI_IN = Ingreso;
+                    DFI_EG = Egreso;
+                }
+                   
                 IngresoTotal += Ingreso;
                 EgresoTotal += Egreso;
                 SaldoTotal += Saldo;
@@ -200,27 +227,28 @@ public class LibroMayor extends javax.swing.JFrame {
                     
                     switch(Listado.get(j).toUpperCase()) {
                         case "BANCO":
-                                Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                                Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Ingreso += (double) Math.round(Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1)))));
+                                Egreso +=  (double) Math.round(Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1)))));
                             break;
                         case "CAJA":
-                                Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                                Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Ingreso += (double) Math.round(Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1)))));
+                                Egreso +=  (double) Math.round(Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1)))));
                             break;
                         case "CUENTA CORRIENTE":
-                                Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                                Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                            break;
+                                Ingreso += (double) Math.round(Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1)))));
+                                Egreso +=  (double) Math.round(Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1)))));
+                            break; 
                         default:
                             break;
                     }
                     
-                }
+                }                
+                
                 IngresoTotal += Ingreso;
                 EgresoTotal += Egreso;
                 Saldo =  Ingreso - Egreso;
                 SaldoTotal += Saldo;
-                
+                   
                 modeloTabla.setValueAt("$" + Ingreso, i, 2);
                 modeloTabla.setValueAt("$" + Egreso, i, 3);
                 
@@ -255,6 +283,87 @@ public class LibroMayor extends javax.swing.JFrame {
             {
                 modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Nulo)", ContadorAUX, 4);
             }
+           
+           IVA_TOTAL = (double) Math.round((CFI_IN - CFI_EG) - (DFI_IN - DFI_EG));
+           LB_CFI.setText("$ " + Math.abs(CFI_IN - CFI_EG));
+           LB_DFI.setText("$ " + Math.abs(DFI_IN - DFI_EG));
+           
+           if(IVA_TOTAL > 0)
+           {
+               LB_TOTAL.setText("$ " + Math.abs(IVA_TOTAL) + " REMANENTE DE IVA");
+           }
+           else if(IVA_TOTAL <= 0)
+           {
+               LB_TOTAL.setText("$ " + Math.abs(IVA_TOTAL) + " IVA POR PAGAR");
+           }
+           
+           
+           
+           
+           /* Decoración UI */
+        try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            LB_EMPRESA.setFont(sizedFont);
+            jTable1.setFont(sizedFont);
+            
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+        try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Bold.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+                   
+            LB_CFI.setFont(sizedFont);
+            LB_DFI.setFont(sizedFont);
+            LB_TOTAL.setFont(sizedFont);
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+        
+        LB_EMPRESA.setText(base.obtenerEmpresa_SegunID(USUARIO.getEmpresa()).getNomre_empresa().toUpperCase());
+        
+        /* Decoración para centrar el texto de la primera columna y poner el texto en negrita unicamente a la primera columna */
+        DefaultTableCellRenderer R = new DefaultTableCellRenderer()
+        {
+            @Override
+            public Component getTableCellRendererComponent(JTable table,
+                            Object value, boolean isSelected, boolean hasFocus,
+                            int row, int column)
+            {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                            row, column);
+                
+                try
+                {
+                    InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Bold.ttf");
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+                    Font sizedFont = font.deriveFont(16f);
+                    setFont(sizedFont);
+                }
+                catch(FontFormatException | IOException ex){    } 
+                return this;
+            }
+ 
+        };
+        /* Se centra el texto */
+        R.setHorizontalAlignment(JLabel.CENTER);
+        
+        //Se cambia la fuente para la primera columna
+       jTable1.getColumnModel().getColumn(0).setCellRenderer(R);
+        
+        BTN_Cerrar.setOpaque(false);
+        BTN_Cerrar.setContentAreaFilled(false);
+        BTN_Cerrar.setBorderPainted(false);
 
     }
 
@@ -267,55 +376,74 @@ public class LibroMayor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        LB_CFI = new javax.swing.JLabel();
+        LB_DFI = new javax.swing.JLabel();
+        LB_TOTAL = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        BTN_Cerrar = new javax.swing.JButton();
+        LB_EMPRESA = new javax.swing.JLabel();
+        BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1500, 1500));
+        setMinimumSize(new java.awt.Dimension(1115, 785));
+        setPreferredSize(new java.awt.Dimension(1115, 785));
+        setResizable(false);
+        getContentPane().setLayout(null);
+
+        LB_CFI.setForeground(new java.awt.Color(255, 255, 255));
+        LB_CFI.setText("jLabel1");
+        getContentPane().add(LB_CFI);
+        LB_CFI.setBounds(420, 626, 270, 16);
+
+        LB_DFI.setForeground(new java.awt.Color(255, 255, 255));
+        LB_DFI.setText("jLabel2");
+        getContentPane().add(LB_DFI);
+        LB_DFI.setBounds(420, 666, 270, 16);
+
+        LB_TOTAL.setForeground(new java.awt.Color(255, 255, 255));
+        LB_TOTAL.setText("jLabel3");
+        getContentPane().add(LB_TOTAL);
+        LB_TOTAL.setBounds(420, 704, 270, 20);
 
         jTable1.setModel(modeloTabla);
+        jTable1.setRowHeight(25);
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel1.setText("jLabel1");
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(20, 150, 1070, 410);
 
-        jLabel2.setText("jLabel2");
+        BTN_Cerrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BTN_Cerrar.setOpaque(false);
+        BTN_Cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_CerrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BTN_Cerrar);
+        BTN_Cerrar.setBounds(890, 660, 200, 60);
 
-        jLabel3.setText("jLabel3");
+        LB_EMPRESA.setForeground(new java.awt.Color(255, 255, 255));
+        LB_EMPRESA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        LB_EMPRESA.setText("jLabel4");
+        LB_EMPRESA.setToolTipText("");
+        getContentPane().add(LB_EMPRESA);
+        LB_EMPRESA.setBounds(0, 80, 1140, 16);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1023, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addGap(187, 187, 187))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(105, Short.MAX_VALUE))
-        );
+        BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/LibroMayor.png"))); // NOI18N
+        BG.setMaximumSize(new java.awt.Dimension(1500, 1500));
+        BG.setMinimumSize(new java.awt.Dimension(1125, 785));
+        BG.setPreferredSize(new java.awt.Dimension(1125, 785));
+        getContentPane().add(BG);
+        BG.setBounds(0, 0, 1110, 750);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BTN_CerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_CerrarActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_BTN_CerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -353,9 +481,12 @@ public class LibroMayor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel BG;
+    private javax.swing.JButton BTN_Cerrar;
+    private javax.swing.JLabel LB_CFI;
+    private javax.swing.JLabel LB_DFI;
+    private javax.swing.JLabel LB_EMPRESA;
+    private javax.swing.JLabel LB_TOTAL;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

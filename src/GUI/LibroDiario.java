@@ -49,9 +49,12 @@ public class LibroDiario extends javax.swing.JFrame {
     private void cargarModeloTabla() {
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         BaseDatos base = factory.baseDatos();
-
+        
+        /* Solo muestra el Libro diario de la empresa 3 */
         ArrayList<Partida> listaPartidas = base.obtenerPartidas_SegunEmpresa(3);
         ArrayList<Transaccion> listaTransacciones = base.obtenerTransacciones_SegunEmpresa(3);
+        
+        
         int numFilas = listaPartidas.size() + listaPartidas.size() + listaTransacciones.size();
         modeloTabla.setNumRows(numFilas);
         Double totalIngresos = 0.0;
