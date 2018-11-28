@@ -40,6 +40,12 @@ public class BaseDatos {
     Connection connect;
     PreparedStatement st = null;
     ResultSet rs = null;
+    
+    
+    //variables para el usuario
+    public static String usu;
+    public static int idusuario;
+    public static int idempresa;
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -74,9 +80,53 @@ public class BaseDatos {
         } catch (SQLException ex) {
             //System.out.print(Conector.class.getName()).log(Level.SEVERE, null, ex);
             System.out.print("Error al cerrar la conexion");
+            usu = null;
+            idusuario = 0;
+            idempresa = 0;
         }
     }
 
+    //crear una nueva partida en la base de datos
+    public void nuevaPartida(Partida partida){
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            
+            connect = DriverManager.getConnection(url);
+            int usuario = partida.getUsuarioID();
+            int empresa = partida.getEmpresaID();
+            int numero = partida.getNumPartida();
+            String fecha = partida.getFecha();
+            String descripcion = partida.getDescripcion();
+            float ingresos = partida.getTotalIngresos();
+            float egresos = partida.getTotalEgresos();
+            
+            
+            String SQLQuery = "INSERT INTO partidas (empresaID, usuarioID, numPartida, fecha,"
+                    + "descripcion, totalIngresos, totalEgresos) VALUES ("+usuario+","+empresa+","+numero+","
+                    + "'"+fecha+"','"+descripcion+"',"+ingresos+","+egresos+")";
+            st = connect.prepareStatement(SQLQuery);
+            st.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Nuevo registro agregado correctamente");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        
+    }
+    
+    
     //Crea la base de Datos (Comprobando primero que el directorio exista)
     public void crearBaseDatos() {
         this.verificarDirectorio();
@@ -111,6 +161,9 @@ public class BaseDatos {
 
             if (rs.next()) {
                 aproved = true;
+                usu = rs.getString("usuario");
+                idusuario = rs.getInt("id");
+                idempresa = rs.getInt("empresa");   
             }
 
         } catch (SQLException ex) {
