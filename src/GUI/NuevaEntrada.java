@@ -9,10 +9,13 @@ import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
 import static java.lang.Float.parseFloat;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -399,6 +402,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
         this.dispose();
         estafecha = null;
         descripcion = null;
+        factory.baseDatos().numPartida = 0;
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void btn_cancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarCuentaActionPerformed
@@ -506,10 +510,16 @@ public class NuevaEntrada extends javax.swing.JFrame {
         egresos = sumahaber; //los egresos totales
         
         
+        try {
+            factory.baseDatos().numeroPartida();
+        } catch (SQLException ex) {
+            Logger.getLogger(NuevaEntrada.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         if(ingresos == egresos){
             JOptionPane.showMessageDialog(this, "Son iguales los ingresos con los egresos");
             Partida partidaOBJ = factory.partida(WIDTH, factory.baseDatos().idempresa, factory.baseDatos().idusuario
-                    , 3 , estafecha, descripcion, ingresos, egresos);
+                    , factory.baseDatos().numPartida , estafecha, descripcion, ingresos, egresos);
             
             factory.baseDatos().nuevaPartida(partidaOBJ);
             

@@ -48,7 +48,7 @@ public class BaseDatos {
     public static int idempresa;
     
     //para saber el numero de partida
-    int numeroPartida;
+    public static int numPartida;
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -86,31 +86,35 @@ public class BaseDatos {
             usu = null;
             idusuario = 0;
             idempresa = 0;
-            numeroPartida = 0;
+            numPartida = 0;
         }
     }
     
+    //obtiene el id de la ultima partida ingresada
     public void numeroPartida() throws SQLException{
-        
-        String SSQL = "SELECT * FROM partidas";
         connect = DriverManager.getConnection(url);
-        Statement st = connect.createStatement();
+        
         try {
-            int contador = 0;
-            ResultSet rs = st.executeQuery(SSQL);
+            connect = DriverManager.getConnection(url);
+            String SQLQuery = "SELECT * FROM partidas";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
             
-            while(rs.next()){
-                contador += contador;
+            while (rs.next()){
+                numPartida = rs.getInt("id");
             }
-            numeroPartida = contador;
+            
+            this.numPartida += 1;
+            
+            System.out.print(numPartida);
             
         } catch (SQLException ex) {
-            System.out.println(ex + "Error de conexión");
+            ex.printStackTrace();
         }
+        
         
     }
     
-
     //crear una nueva partida en la base de datos
     public void nuevaPartida(Partida partida){
         
@@ -127,7 +131,7 @@ public class BaseDatos {
 
             st.setInt(1, partida.getUsuarioID());
             st.setInt(2, partida.getUsuarioID());
-            st.setInt(3, partida.getNumPartida());
+            st.setInt(3, this.numPartida);
             st.setString(4, partida.getFecha());
             st.setString(5, partida.getDescripcion());
             st.setFloat(6, partida.getTotalIngresos());
@@ -143,10 +147,40 @@ public class BaseDatos {
                 ex.printStackTrace();
             }
         }
-        
-        
     }
     
+    //agrega una nueva transaccion
+    public void nuevaTransaccion(Partida partida){
+        
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "INSERT INTO transacciones (idPartida, empresaID, cuenta, transaccionIngreso,"
+                    + "transaccionEgresos) VALUES (?,?,?,?,?)";
+            st = connect.prepareStatement(SQLQuery);
+
+            //st.setInt(1, );
+            //st.setInt(2, );
+            //st.setInt(3, );
+            //st.setString(4, );
+            //st.setString(5, );
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Nueva transaccion agregada tambien");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+        
     
     //Crea la base de Datos (Comprobando primero que el directorio exista)
     public void crearBaseDatos() {
