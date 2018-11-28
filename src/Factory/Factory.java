@@ -45,6 +45,10 @@ public class Factory {
         return new BalanceComprobacion(usuario);
     }
 
+    public EstadoResultados estadoResultados(Usuario usuario){
+        return new EstadoResultados(usuario);
+    }
+    
     public RegistroUsuario registroUsuario() {
         return new RegistroUsuario();
     }

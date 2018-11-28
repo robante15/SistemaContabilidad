@@ -214,9 +214,9 @@ public class Principal extends javax.swing.JFrame {
         menu_libroDiario = new javax.swing.JMenuItem();
         menu_libroMayor = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        menu_balanceComprobacion = new javax.swing.JMenuItem();
+        menu_estadoResultados = new javax.swing.JMenuItem();
+        menu_balanceGeneral = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1125, 810));
@@ -352,22 +352,27 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem3.setText("Ajuste de IVA");
         bMenu_vista.add(jMenuItem3);
 
-        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem5.setText("Balance de Comprobación");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        menu_balanceComprobacion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        menu_balanceComprobacion.setText("Balance de Comprobación");
+        menu_balanceComprobacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                menu_balanceComprobacionActionPerformed(evt);
             }
         });
-        bMenu_vista.add(jMenuItem5);
+        bMenu_vista.add(menu_balanceComprobacion);
 
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem4.setText("Estado de Resultados");
-        bMenu_vista.add(jMenuItem4);
+        menu_estadoResultados.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        menu_estadoResultados.setText("Estado de Resultados");
+        menu_estadoResultados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_estadoResultadosActionPerformed(evt);
+            }
+        });
+        bMenu_vista.add(menu_estadoResultados);
 
-        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem6.setText("Balance General");
-        bMenu_vista.add(jMenuItem6);
+        menu_balanceGeneral.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        menu_balanceGeneral.setText("Balance General");
+        bMenu_vista.add(menu_balanceGeneral);
 
         jMenuBar1.add(bMenu_vista);
 
@@ -395,10 +400,15 @@ public class Principal extends javax.swing.JFrame {
         libroMayor.setVisible(true);
     }//GEN-LAST:event_menu_libroMayorActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void menu_balanceComprobacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_balanceComprobacionActionPerformed
         BalanceComprobacion balanceComprobacion = factory.balanceComprobacion(USUARIO);
         balanceComprobacion.setVisible(true);
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_menu_balanceComprobacionActionPerformed
+
+    private void menu_estadoResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_estadoResultadosActionPerformed
+        EstadoResultados estadoResultados = factory.estadoResultados(USUARIO);
+        estadoResultados.setVisible(true);
+    }//GEN-LAST:event_menu_estadoResultadosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -445,14 +455,14 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_bienvenida;
     private javax.swing.JLabel lbl_empresa;
     private javax.swing.JLabel lbl_finanzasEmpresa;
     private javax.swing.JLabel lbl_totalMovimientos;
+    private javax.swing.JMenuItem menu_balanceComprobacion;
+    private javax.swing.JMenuItem menu_balanceGeneral;
+    private javax.swing.JMenuItem menu_estadoResultados;
     private javax.swing.JMenuItem menu_libroDiario;
     private javax.swing.JMenuItem menu_libroMayor;
     private javax.swing.ButtonGroup rbtnG_periodoTiempo;
