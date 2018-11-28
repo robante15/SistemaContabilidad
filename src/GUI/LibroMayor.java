@@ -9,6 +9,8 @@ import Entidades.Usuario;
 import Factory.Factory;
 import Procesos.BaseDatos;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -42,7 +44,14 @@ public class LibroMayor extends javax.swing.JFrame {
         
        BaseDatos base = factory.baseDatos();
        ArrayList<String> Listado = base.ObtenerIDCuentaEnTransacciones(usuario.getEmpresa());
-       ArrayList<String> ListadoAUX = Listado;
+       Set<String> EliminarRepetidos = new LinkedHashSet<>();
+       
+       EliminarRepetidos.addAll(Listado);
+       Listado.clear();
+       Listado.addAll(EliminarRepetidos);
+       
+       
+       ArrayList<String> ListadoAUX = new ArrayList<>(Listado);
        int Contador = 0;
        int ContadorAUX = 0;
        Double Saldo;
@@ -53,50 +62,108 @@ public class LibroMayor extends javax.swing.JFrame {
        Double EgresoTotal = 0.0;
        Boolean AgregadaEyE = false;
        
+       Boolean AparecioBanco = false;
+       Boolean AparecioCaja = false;
+       Boolean AparecioCuentaCorriente = false;
+       
        modeloTabla.setRowCount(Listado.size() );
        
-       for(int i = 0; Contador < Listado.size(); i++)
+       
+       
+       TOTAL:
+       for(int i = 0; Contador < ListadoAUX.size(); i++)
        {
            ContadorAUX = i + 1;
            OUTER:
            for(int j = 0; j < 2; j++)
            {
-               //Filtro para no agregar ciertas cuentas al libro mayor, para aÃ±adir una cuenta, solo agregar un case enmedio de los demÃ¡s
-                switch (Listado.get(Contador).toUpperCase()) {
-                    case "CAJA": //Para quitar un filtro, solo borrar el case
-                    //Para agregar filtro, quitar este comentario y colocar otro case con el nombre de la cuenta en mayÃºsculas
-                    case "BANCO":
-                    case "CUENTA CORRIENTE":
-                        if (!AgregadaEyE) {
+               
+               if(ListadoAUX.get(Contador).toUpperCase().equals("CAJA") || ListadoAUX.get(Contador).toUpperCase().equals("BANCO") || ListadoAUX.get(Contador).toUpperCase().equals("CUENTA CORRIENTE"))
+               {
+                   if (!AgregadaEyE) {
                             AgregadaEyE = true;
                             modeloTabla.setValueAt("--", i, 0);
                             modeloTabla.setValueAt("Efectivo y equivalentes", i, 1);
-                            Contador++;
+                            ListadoAUX.remove(Contador);
+                            ListadoAUX.remove(Contador - 1);
+                            Contador++;      
                             break OUTER;
                         } else {
                             Contador++;
                             i--;
                             break OUTER;
                         }
+               }
+
+               else if(ListadoAUX.get(Contador).toUpperCase().equals("CREDITO FISCAL IVA") || ListadoAUX.get(Contador).toUpperCase().equals("DEBITO FISCAL IVA")
+                       || ListadoAUX.get(Contador).toUpperCase().equals("IVA POR PAGAR") || ListadoAUX.get(Contador).toUpperCase().equals("RESERVA LEGAL")
+                       || ListadoAUX.get(Contador).toUpperCase().equals("UTILIDAD NETA") || ListadoAUX.get(Contador).toUpperCase().equals("IMPUESTO SOBRE RENTA")
+                       || ListadoAUX.get(Contador).toUpperCase().equals("REMANENTE DE IVA"))
+               {
+                        Contador++;
+                        i--;
+                        break OUTER;
+               }
+               else
+               {
+                    modeloTabla.setValueAt(ListadoAUX.get(Contador), i, j);                      
+                    Contador++;     
+               }
+
+               
+               //Filtro para no agregar ciertas cuentas al libro mayor, para aÃ±adir una cuenta, solo agregar un case enmedio de los demÃ¡s
+                /* switch (ListadoAUX.get(Contador).toUpperCase()) {
+                    case "CAJA": //Para quitar un filtro, solo borrar el case
+                    //Para agregar filtro, quitar este comentario y colocar otro case con el nombre de la cuenta en mayÃºsculas
+                    case "BANCO":
+                        if (!AgregadaEyE) {
+                            AgregadaEyE = true;
+                            modeloTabla.setValueAt("--", i, 0);
+                            modeloTabla.setValueAt("Efectivo y equivalentes", i, 1);
+                            Contador++;
+                            ListadoAUX.remove(Contador - 1);
+                            ListadoAUX.remove(Contador);
+
+                            break OUTER;
+                        } else {
+                            Contador++;
+                            i--;
+                            break OUTER;
+                        }
+                    case "CREDITO FISCAL IVA":
+                    case "DEBITO FISCAL IVA":
                     case "IVA POR PAGAR":
                     case "RESERVA LEGAL":
                     case "UTILIDAD NETA":
                     case "IMPUESTO SOBRE RENTA":
                     case "REMANENTE DE IVA":
-                        Contador++;
+                        Contador++;   
                         i--;
                         break OUTER;
                     default:
-                        modeloTabla.setValueAt(Listado.get(Contador), i, j);
+                        System.out.println("VALOR A ESCRIBIR: " + ListadoAUX.get(Contador));
+                        modeloTabla.setValueAt(ListadoAUX.get(Contador), i, j);                      
                         Contador++;
                         break;      
                 }
+               
+               */
            }
        }
-       modeloTabla.setNumRows(ContadorAUX + 1);
-       modeloTabla.setValueAt("Total: ", ContadorAUX, 0);
+         
+       if(ContadorAUX > 0 && modeloTabla.getValueAt((ContadorAUX - 1), 0) != null && modeloTabla.getValueAt((ContadorAUX - 1), 1) == null)
+       {
+            modeloTabla.setNumRows(ContadorAUX);
+            modeloTabla.setValueAt("Total: ", ContadorAUX - 1, 0);
+       }
+       else
+       {
+            modeloTabla.setNumRows(ContadorAUX + 1);
+            modeloTabla.setValueAt("Total: ", ContadorAUX, 0);
+       }
+      
        
-       for(int i = 0; i < ContadorAUX; i++)
+       for(int i = 0; i < ContadorAUX - 1; i++)
        {
            Saldo = 0.0;
            Ingreso = 0.0;
@@ -129,22 +196,24 @@ public class LibroMayor extends javax.swing.JFrame {
             {
                 for(int j = 0; j < Listado.size(); j++)
                 {
-                    switch (Listado.get(j).toUpperCase()) {
+                    
+                    switch(Listado.get(j).toUpperCase()) {
                         case "BANCO":
-                            Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                            Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
                             break;
                         case "CAJA":
-                            Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                            Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
                             break;
                         case "CUENTA CORRIENTE":
-                            Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
-                            Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                                Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
                             break;
                         default:
                             break;
                     }
+                    
                 }
                 IngresoTotal += Ingreso;
                 EgresoTotal += Egreso;
@@ -158,24 +227,59 @@ public class LibroMayor extends javax.swing.JFrame {
                 {
                     modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Acreedor)", i, 4);
                 }
-                else
+                else if(Saldo > 0)
                 {
                     modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Deudor)", i, 4);
                 }
+                else if(Saldo == 0)
+                {
+                    modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Nulo)", i, 4);
+                }
             }   
        }
+        System.out.println("Tamaño tabla = " +  modeloTabla.getRowCount());
+       if(modeloTabla.getRowCount() == ContadorAUX)
+       {
+            modeloTabla.setValueAt("$" + IngresoTotal, (ContadorAUX - 1), 2);
+            modeloTabla.setValueAt("$" + EgresoTotal, (ContadorAUX - 1), 3);
+       }
+       else
+       {
+            modeloTabla.setValueAt("$" + IngresoTotal, ContadorAUX, 2);
+            modeloTabla.setValueAt("$" + EgresoTotal, ContadorAUX, 3);
+       }
+      
+       if(modeloTabla.getRowCount() == ContadorAUX)
+       {
+            if(SaldoTotal < 0)
+            {
+                modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Acreedor)", (ContadorAUX - 1), 4);
+            }
+            else if(SaldoTotal > 0)
+            {
+                modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Deudor)", (ContadorAUX - 1), 4);
+            }
+            else if (SaldoTotal == 0)
+            {
+                modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Nulo)", (ContadorAUX - 1), 4);
+            }
+       }
+       else
+       {
+           if(SaldoTotal < 0)
+            {
+                modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Acreedor)", ContadorAUX, 4);
+            }
+            else if(SaldoTotal > 0)
+            {
+                modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Deudor)", ContadorAUX, 4);
+            }
+            else if (SaldoTotal == 0)
+            {
+                modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Nulo)", ContadorAUX, 4);
+            }
+       }
        
-       modeloTabla.setValueAt("$" + IngresoTotal, ContadorAUX, 2);
-       modeloTabla.setValueAt("$" + EgresoTotal, ContadorAUX, 3);
-       
-        if(SaldoTotal < 0)
-        {
-            modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Acreedor)", ContadorAUX, 4);
-        }
-        else
-        {
-            modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Deudor)", Contador, 4);
-        }
        
     }
 
@@ -190,27 +294,49 @@ public class LibroMayor extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
 
+        jLabel1.setText("jLabel1");
+
+        jLabel2.setText("jLabel2");
+
+        jLabel3.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(22, 22, 22)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1023, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addGap(187, 187, 187))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(172, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(113, 113, 113)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(149, 149, 149))
+                .addGap(37, 37, 37)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         pack();
@@ -252,6 +378,9 @@ public class LibroMayor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
