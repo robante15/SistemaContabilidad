@@ -35,9 +35,9 @@ public class NuevaEntrada extends javax.swing.JFrame {
     
     
     //array para la transacciones
-    public ArrayList<String> trancuenta  = new ArrayList<>();
-    public ArrayList<String> traningre  = new ArrayList<>();
-    public ArrayList<String> tranegre  = new ArrayList<>();
+    public static ArrayList<String> trancuenta  = new ArrayList<>();
+    public static ArrayList<String> traningre  = new ArrayList<>();
+    public static ArrayList<String> tranegre  = new ArrayList<>();
     
     public NuevaEntrada() {
         initComponents();
@@ -110,7 +110,6 @@ public class NuevaEntrada extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         descripcionTXT = new javax.swing.JTextArea();
         lbl_descripcion = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         btn_agregarCuenta = new javax.swing.JButton();
 
         jframe_agregarCuenta.setMinimumSize(new java.awt.Dimension(400, 425));
@@ -335,12 +334,9 @@ public class NuevaEntrada extends javax.swing.JFrame {
                                 .addComponent(btn_agregarCuenta))
                             .addComponent(btn_añadir))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(rbtn_ingreso)
-                                .addGap(31, 31, 31)
-                                .addComponent(rbtn_egreso))
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(rbtn_ingreso)
+                        .addGap(31, 31, 31)
+                        .addComponent(rbtn_egreso)
                         .addGap(18, 18, 18)
                         .addComponent(lbl_descripcion)
                         .addGap(18, 18, 18)
@@ -365,9 +361,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btn_añadir))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_descripcion, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(2, 2, 2)
+                        .addComponent(lbl_descripcion)
                         .addGap(31, 31, 31)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(rbtn_ingreso)
@@ -558,6 +553,9 @@ public class NuevaEntrada extends javax.swing.JFrame {
             System.out.print("ingresos = " + partidaOBJ.getTotalIngresos());
             System.out.print("egresos = " + partidaOBJ.getTotalEgresos());
             
+            
+            this.dispose();
+            
         }else if(ingresos > egresos){
             JOptionPane.showMessageDialog(this, "Los ingresos son mayores que los egresos");
         }else{
@@ -619,7 +617,6 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbox_clasificacionCuenta;
     private javax.swing.JComboBox<String> cbox_cuentas;
     private javax.swing.JTextArea descripcionTXT;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

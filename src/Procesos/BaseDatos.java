@@ -51,7 +51,7 @@ public class BaseDatos {
     public static int numPartida;
     
     //arreglo par los id de las cuentas
-    ArrayList<String> listarID = new ArrayList<>();
+    static ArrayList<String> listarID = new ArrayList<>();
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -154,7 +154,6 @@ public class BaseDatos {
     
     //agrega una nueva transaccion
     public void nuevaTransaccion(){
-        
         try {
             if (osName.equals("linux")) {
                 System.out.println("Este sistema esta diseñado para correr en Windows");
