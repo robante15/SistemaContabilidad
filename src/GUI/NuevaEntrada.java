@@ -32,7 +32,13 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private static Factory factory;
     String descripcion;
     String estafecha;
-
+    
+    
+    //array para la transacciones
+    public ArrayList<String> trancuenta  = new ArrayList<>();
+    public ArrayList<String> traningre  = new ArrayList<>();
+    public ArrayList<String> tranegre  = new ArrayList<>();
+    
     public NuevaEntrada() {
         initComponents();
         cargarColumnasTabla();
@@ -403,6 +409,9 @@ public class NuevaEntrada extends javax.swing.JFrame {
         estafecha = null;
         descripcion = null;
         factory.baseDatos().numPartida = 0;
+        trancuenta.clear();
+        traningre.clear();
+        tranegre.clear();
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void btn_cancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarCuentaActionPerformed
@@ -484,6 +493,9 @@ public class NuevaEntrada extends javax.swing.JFrame {
         modeloTabla.addRow(filaNueva);
         
         
+        trancuenta.add(cuenta);
+        traningre.add(Float.toString(debe));
+        tranegre.add(Float.toString(haber));
     }//GEN-LAST:event_btn_añadirActionPerformed
 
     private void btn_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_aceptarActionPerformed
@@ -517,11 +529,25 @@ public class NuevaEntrada extends javax.swing.JFrame {
         }
         
         if(ingresos == egresos){
+            
+            for(int i=0; i < trancuenta.size(); i++){
+                System.out.print("\n");
+                System.out.print("numero partida: "+factory.baseDatos().numPartida +"\n");
+                System.out.print("empresa: " +factory.baseDatos().idempresa +"\n");
+                System.out.print("cuenta: " + trancuenta.get(i) + "\n");
+                factory.baseDatos().obtenerID(trancuenta.get(i));
+                System.out.print("ingresos: " + traningre.get(i) + "\n");
+                System.out.print("egresos: " + tranegre.get(i) + "\n");
+                System.out.print("\n");
+            }
+            
+            
             JOptionPane.showMessageDialog(this, "Son iguales los ingresos con los egresos");
             Partida partidaOBJ = factory.partida(WIDTH, factory.baseDatos().idempresa, factory.baseDatos().idusuario
                     , factory.baseDatos().numPartida , estafecha, descripcion, ingresos, egresos);
             
             factory.baseDatos().nuevaPartida(partidaOBJ);
+            factory.baseDatos().nuevaTransaccion();
             
             System.out.print("id = " + partidaOBJ.getId());
             System.out.print("empresa = " + partidaOBJ.getEmpresaID());
@@ -531,6 +557,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
             System.out.print("descripcion = " + partidaOBJ.getDescripcion());
             System.out.print("ingresos = " + partidaOBJ.getTotalIngresos());
             System.out.print("egresos = " + partidaOBJ.getTotalEgresos());
+            
         }else if(ingresos > egresos){
             JOptionPane.showMessageDialog(this, "Los ingresos son mayores que los egresos");
         }else{

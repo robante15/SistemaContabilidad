@@ -49,6 +49,9 @@ public class BaseDatos {
     
     //para saber el numero de partida
     public static int numPartida;
+    
+    //arreglo par los id de las cuentas
+    ArrayList<String> listarID = new ArrayList<>();
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -131,7 +134,7 @@ public class BaseDatos {
 
             st.setInt(1, partida.getUsuarioID());
             st.setInt(2, partida.getUsuarioID());
-            st.setInt(3, this.numPartida);
+            st.setInt(3, partida.getNumPartida());
             st.setString(4, partida.getFecha());
             st.setString(5, partida.getDescripcion());
             st.setFloat(6, partida.getTotalIngresos());
@@ -150,7 +153,7 @@ public class BaseDatos {
     }
     
     //agrega una nueva transaccion
-    public void nuevaTransaccion(Partida partida){
+    public void nuevaTransaccion(){
         
         try {
             if (osName.equals("linux")) {
@@ -162,13 +165,15 @@ public class BaseDatos {
             String SQLQuery = "INSERT INTO transacciones (idPartida, empresaID, cuenta, transaccionIngreso,"
                     + "transaccionEgresos) VALUES (?,?,?,?,?)";
             st = connect.prepareStatement(SQLQuery);
-
-            //st.setInt(1, );
-            //st.setInt(2, );
-            //st.setInt(3, );
-            //st.setString(4, );
-            //st.setString(5, );
+            
+            for(int i=0; i<factory.nuevaEntrada().trancuenta.size();i++){
+            st.setInt(1, this.numPartida);
+            st.setInt(2, this.idempresa);
+            st.setInt(3, Integer.parseInt(this.listarID.get(i)));
+            st.setFloat(4,  Float.parseFloat(factory.nuevaEntrada().traningre.get(i)));
+            st.setFloat(5, Float.parseFloat(factory.nuevaEntrada().tranegre.get(i)));
             st.executeUpdate();
+            }
             JOptionPane.showMessageDialog(null, "Nueva transaccion agregada tambien");
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -179,6 +184,41 @@ public class BaseDatos {
                 ex.printStackTrace();
             }
         }
+    }
+    
+    public void obtenerID(String cuenta) {
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            
+            String SQLQuery = "SELECT * FROM cuentas where nombre_cuenta = '"+ cuenta +"'";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                int idcuenta = rs.getInt("id");
+                listarID.add(Integer.toString(idcuenta));
+            }
+            
+            for(int i=0; i<listarID.size(); i++){
+                System.out.print("ID de cuenta :"+listarID.get(i) +"\n");
+            }
+            
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
     }
         
     
