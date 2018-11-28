@@ -381,12 +381,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnM_salirActionPerformed
 
     private void menu_libroDiarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_libroDiarioActionPerformed
-        LibroDiario libroDiario = factory.libroDiario();
+        LibroDiario libroDiario = factory.libroDiario(USUARIO);
         libroDiario.setVisible(true);
     }//GEN-LAST:event_menu_libroDiarioActionPerformed
 
     private void menu_libroMayorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_libroMayorActionPerformed
-        LibroMayor libroMayor = factory.libroMayor();
+        LibroMayor libroMayor = factory.libroMayor(USUARIO);
         libroMayor.setVisible(true);
     }//GEN-LAST:event_menu_libroMayorActionPerformed
 

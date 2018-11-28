@@ -33,12 +33,12 @@ public class Factory {
         return new NuevaEntrada();
     }
     
-    public LibroDiario libroDiario(){
-        return new LibroDiario();
+    public LibroDiario libroDiario(Usuario usuario){
+        return new LibroDiario(usuario);
     }
     
-    public LibroMayor libroMayor(){
-        return new LibroMayor();
+    public LibroMayor libroMayor(Usuario usuario){
+        return new LibroMayor(usuario);
     }
 
     public RegistroUsuario registroUsuario() {

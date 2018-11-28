@@ -21,11 +21,12 @@ public class LibroMayor extends javax.swing.JFrame {
      * Creates new form LibroMayor
      */
     private static Factory factory;
-    static Usuario usuario;
+    static Usuario USUARIO;
     DefaultTableModel modeloTabla = new DefaultTableModel();
     
-    public LibroMayor() {
+    public LibroMayor(Usuario usuario) {
         initComponents();
+        USUARIO = usuario;
         factory = new Factory();
         
         /* CARGA DE DATOS */
@@ -40,20 +41,30 @@ public class LibroMayor extends javax.swing.JFrame {
         //Agregamos las filas a la tabla
         
        BaseDatos base = factory.baseDatos();
-       ArrayList<String> Listado = base.listarCuentasLM();
-       modeloTabla.setNumRows((Listado.size() / 2) + 1);
+       ArrayList<String> Listado = base.ObtenerIDCuentaEnTransacciones(usuario.getEmpresa());
+       ArrayList<String> ListadoAUX = Listado;
        int Contador = 0;
        int ContadorAUX = 0;
+       Double Saldo;
+       Double Ingreso;
+       Double Egreso;
+       Double SaldoTotal = 0.0;
+       Double IngresoTotal = 0.0;
+       Double EgresoTotal = 0.0;
        Boolean AgregadaEyE = false;
+       
+       modeloTabla.setRowCount(Listado.size() );
        
        for(int i = 0; Contador < Listado.size(); i++)
        {
-            ContadorAUX = i + 1;
-            OUTER:
-            for (int j = 0; j < 2; j++) {     
-                
+           ContadorAUX = i + 1;
+           OUTER:
+           for(int j = 0; j < 2; j++)
+           {
+               //Filtro para no agregar ciertas cuentas al libro mayor, para aÃ±adir una cuenta, solo agregar un case enmedio de los demÃ¡s
                 switch (Listado.get(Contador).toUpperCase()) {
-                    case "CAJA":
+                    case "CAJA": //Para quitar un filtro, solo borrar el case
+                    //Para agregar filtro, quitar este comentario y colocar otro case con el nombre de la cuenta en mayÃºsculas
                     case "BANCO":
                     case "CUENTA CORRIENTE":
                         if (!AgregadaEyE) {
@@ -68,6 +79,9 @@ public class LibroMayor extends javax.swing.JFrame {
                             break OUTER;
                         }
                     case "IVA POR PAGAR":
+                    case "RESERVA LEGAL":
+                    case "UTILIDAD NETA":
+                    case "IMPUESTO SOBRE RENTA":
                     case "REMANENTE DE IVA":
                         Contador++;
                         i--;
@@ -77,10 +91,91 @@ public class LibroMayor extends javax.swing.JFrame {
                         Contador++;
                         break;      
                 }
-            }
+           }
        }
        modeloTabla.setNumRows(ContadorAUX + 1);
        modeloTabla.setValueAt("Total: ", ContadorAUX, 0);
+       
+       for(int i = 0; i < ContadorAUX; i++)
+       {
+           Saldo = 0.0;
+           Ingreso = 0.0;
+           Egreso = 0.0;
+           
+            if(!"--".equals((String)modeloTabla.getValueAt(i, 0)))
+            {
+                Ingreso = Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf((String)modeloTabla.getValueAt(i, 0))));
+                Egreso =  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf((String)modeloTabla.getValueAt(i, 0))));
+                Saldo =  Ingreso - Egreso;
+                
+                
+                IngresoTotal += Ingreso;
+                EgresoTotal += Egreso;
+                SaldoTotal += Saldo;
+                
+                modeloTabla.setValueAt("$" + Ingreso, i, 2);
+                modeloTabla.setValueAt("$" + Egreso, i, 3);
+                
+                if(Saldo < 0)
+                {
+                    modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Acreedor)", i, 4);
+                }
+                else
+                {
+                    modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Deudor)", i, 4);
+                }
+            }
+            else
+            {
+                for(int j = 0; j < Listado.size(); j++)
+                {
+                    switch (Listado.get(j).toUpperCase()) {
+                        case "BANCO":
+                            Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                            Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                            break;
+                        case "CAJA":
+                            Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                            Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                            break;
+                        case "CUENTA CORRIENTE":
+                            Ingreso += Double.valueOf(base.ObtenerIngresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                            Egreso +=  Double.valueOf(base.ObtenerEgresosDeCuenta(USUARIO.getEmpresa(), Integer.valueOf(Listado.get(j - 1))));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                IngresoTotal += Ingreso;
+                EgresoTotal += Egreso;
+                Saldo =  Ingreso - Egreso;
+                SaldoTotal += Saldo;
+                
+                modeloTabla.setValueAt("$" + Ingreso, i, 2);
+                modeloTabla.setValueAt("$" + Egreso, i, 3);
+                
+                if(Saldo < 0)
+                {
+                    modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Acreedor)", i, 4);
+                }
+                else
+                {
+                    modeloTabla.setValueAt("$" + Math.abs(Saldo) + " (Deudor)", i, 4);
+                }
+            }   
+       }
+       
+       modeloTabla.setValueAt("$" + IngresoTotal, ContadorAUX, 2);
+       modeloTabla.setValueAt("$" + EgresoTotal, ContadorAUX, 3);
+       
+        if(SaldoTotal < 0)
+        {
+            modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Acreedor)", ContadorAUX, 4);
+        }
+        else
+        {
+            modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Deudor)", Contador, 4);
+        }
        
     }
 
@@ -151,7 +246,7 @@ public class LibroMayor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LibroMayor().setVisible(true);
+                new LibroMayor(USUARIO).setVisible(true);
             }
         });
     }

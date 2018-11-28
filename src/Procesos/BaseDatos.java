@@ -691,13 +691,58 @@ public class BaseDatos {
         return listaCuentas;
     }
     
-    /*
-    Este metodo lo que hace es devolver un array con el ID DE CUENTA Y NOMBRE de todas las cuentas que hay registradas, esto sirve para mostrarlas en la tabla
-    del LIBRO MAYOR
-     */
-    public ArrayList<String> listarCuentasLM() {
+    /*Esta funcion lo que hace es devolver todos los ID de las cuentas que están en la tabla transacciones
+     esto es para no agregar campos que no se han utilizado en las transacciones */
+    public ArrayList<String> ObtenerIDCuentaEnTransacciones(int empresaID){
         factory = new Factory();
-        ArrayList<String> listaCuentasLM = new ArrayList<String>();
+        
+        ArrayList<String> Listado = new ArrayList<>();
+        
+        try
+        {
+            connect = DriverManager.getConnection(url);
+            String SQL = "SELECT transacciones.cuenta as ID_CUENTA, "
+                    + "cuentas.nombre_cuenta as NOMBRE_CUENTA "
+                    + "FROM transacciones "
+                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id "
+                    + "WHERE empresaID = ? ORDER BY cuenta ASC;";
+            
+            st = connect.prepareStatement(SQL);
+            st.setInt(1, empresaID);
+            
+            rs = st.executeQuery();
+            
+            while(rs.next())
+            {
+                Listado.add(String.valueOf(rs.getInt("ID_CUENTA")));
+                Listado.add(rs.getString("NOMBRE_CUENTA"));
+            }
+        }
+        catch(SQLException ex)
+        {
+            
+        }
+        finally
+        {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return Listado;
+        
+        
+    }
+    
+    /*
+    Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los INGRESOS de la cuenta seleccionada, esto es para evitar escribir
+    código que haga la misma función.
+     */
+    public String ObtenerIngresosDeCuenta(int empresaID, int cuentaID) {
+        factory = new Factory();
+        String SUM_Ingresos  = "0.0"; 
         try {
             if (osName.equals("linux")) {
                 System.out.println("Este sistema esta diseñado para correr en Windows");
@@ -705,17 +750,15 @@ public class BaseDatos {
             } else {
                 connect = DriverManager.getConnection(url);
             }
-            String SQLQuery = "SELECT id, nombre_cuenta FROM cuentas ORDER BY nombre_cuenta ASC";
+            String SQLQuery = "SELECT sum(transaccionIngreso) as Sumatoria from transacciones WHERE empresaID = ? AND cuenta = ?;";
             st = connect.prepareStatement(SQLQuery);
+            st.setInt(1, empresaID);
+            st.setInt(2, cuentaID);
             rs = st.executeQuery();
 
             while (rs.next()) {
 
-                String id_cuenta = String.valueOf(rs.getInt("id"));
-                String nombre_cuenta = rs.getString("nombre_cuenta");
-
-                listaCuentasLM.add(id_cuenta);
-                listaCuentasLM.add(nombre_cuenta);
+                SUM_Ingresos = String.valueOf(rs.getDouble("Sumatoria"));
             }
 
         } catch (SQLException ex) {
@@ -727,7 +770,44 @@ public class BaseDatos {
                 ex.printStackTrace();
             }
         }
-        return listaCuentasLM;
+        return SUM_Ingresos;
+    }
+    
+    /*
+    Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los EGRESOS de la cuenta seleccionada, esto es para evitar escribir
+    código que haga la misma función.
+     */
+    public String ObtenerEgresosDeCuenta(int empresaID, int cuentaID) {
+        factory = new Factory();
+        String SUM_Egresos  = "0.0"; 
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT sum(transaccionEgresos) as Sumatoria from transacciones WHERE empresaID = ? AND cuenta = ?;";
+            st = connect.prepareStatement(SQLQuery);
+            st.setInt(1, empresaID);
+            st.setInt(2, cuentaID);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                SUM_Egresos = String.valueOf(rs.getDouble("Sumatoria"));
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return SUM_Egresos;
     }
 
     /*
