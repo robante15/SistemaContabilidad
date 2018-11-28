@@ -21,16 +21,20 @@ import javax.swing.table.DefaultTableModel;
 public class LibroDiario extends javax.swing.JFrame {
 
     private static Factory factory;
+    static Usuario usuario;
 
     /**
      * Creates new form LibroDiario
      */
-    public LibroDiario() {
+    public LibroDiario(Usuario usuario) {
         initComponents();
         this.setLocationRelativeTo(null);
         factory = new Factory();
         cargarColumnasTabla();
         cargarModeloTabla();
+        BaseDatos base = factory.baseDatos();
+        String nombre_empresa = base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa();
+        this.lbl_empresa.setText(nombre_empresa);
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -45,8 +49,6 @@ public class LibroDiario extends javax.swing.JFrame {
     private void cargarModeloTabla() {
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         BaseDatos base = factory.baseDatos();
-        Fechas fechas = factory.fechas();
-        RangoFecha rango = fechas.EsteMes();
 
         ArrayList<Partida> listaPartidas = base.obtenerPartidas_SegunEmpresa(3);
         ArrayList<Transaccion> listaTransacciones = base.obtenerTransacciones_SegunEmpresa(3);
@@ -75,9 +77,7 @@ public class LibroDiario extends javax.swing.JFrame {
             float totalEgresosPartida = partidaOBJ.getTotalEgresos();
 
             filaDetalles = filaDetalles + 1 + cantidadTransaccionesPorPartida[i];
-            //totalIngresos = totalIngresos + ingreso;
-            //totalEgresos = totalEgresos + egreso;
-
+            
             modeloTabla.setValueAt(fecha, filaTitulo, 0);
             modeloTabla.setValueAt("Partida N° " + partidaNum, filaTitulo, 1);
             modeloTabla.setValueAt("Descripción: ", filaDetalles, 0);
@@ -115,13 +115,16 @@ public class LibroDiario extends javax.swing.JFrame {
                 modeloTabla.setValueAt("           " + base.obtenerNombreCuentaSegunID(cuenta), filaTransaccion, 1);
             }
 
+            totalIngresos = totalIngresos + trasaccionIngreso;
+            totalEgresos = totalEgresos + transaccionEgresos;
+            
             modeloTabla.setValueAt("$ " + trasaccionIngreso, filaTransaccion, 2);
             modeloTabla.setValueAt("$ " + transaccionEgresos, filaTransaccion, 3);
             filaTransaccion++;
 
         }
-        //this.lbl_totalMovimientos.setText("Total de Movimientos     Ingresos: $ " + (double) Math.round(totalIngresos * 100d) / 100d + "     Egresos: $" + (double) Math.round(totalEgresos * 100d) / 100d);
-
+        this.lbl_totalMovimientos.setText("Total de Movimientos     Ingresos: $ " + (double) Math.round(totalIngresos * 100d) / 100d + "     Egresos: $" + (double) Math.round(totalEgresos * 100d) / 100d);
+        //this.lbl
     }
 
     /**
@@ -143,6 +146,11 @@ public class LibroDiario extends javax.swing.JFrame {
         lbl_totalMovimientos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                apertura(evt);
+            }
+        });
 
         lbl_libroDiario.setText("Libro Diario");
 
@@ -224,6 +232,11 @@ public class LibroDiario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void apertura(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_apertura
+        
+        
+    }//GEN-LAST:event_apertura
+
     /**
      * @param args the command line arguments
      */
@@ -262,7 +275,7 @@ public class LibroDiario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LibroDiario().setVisible(true);
+                new LibroDiario(usuario).setVisible(true);
             }
         });
     }
