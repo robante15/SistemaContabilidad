@@ -40,6 +40,10 @@ public class Factory {
     public LibroMayor libroMayor(Usuario usuario){
         return new LibroMayor(usuario);
     }
+    
+    public BalanceComprobacion balanceComprobacion(Usuario usuario){
+        return new BalanceComprobacion(usuario);
+    }
 
     public RegistroUsuario registroUsuario() {
         return new RegistroUsuario();

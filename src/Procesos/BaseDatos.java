@@ -550,6 +550,89 @@ public class BaseDatos {
         return TransaccionesSegunEmpresa;
     }
 
+    //Retorna un array con las transacciones segun la clasificación de la cuenta
+    public ArrayList<Transaccion> obtenerTransacciones_SegunClasificacion(String clasificacion) {
+        factory = new Factory();
+        ArrayList<Transaccion> TransaccionesSegunEmpresa = new ArrayList<Transaccion>();
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT transacciones.id, transacciones.idPartida, transacciones.cuenta, transacciones.transaccionIngreso, transacciones.transaccionEgresos\n"
+                    + "FROM transacciones \n"
+                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id\n"
+                    + "WHERE cuentas.clasificacion = '" + clasificacion + "'";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                int idPartida = rs.getInt("idPartida");
+                int cuenta = rs.getInt("cuenta");
+                float trasaccionIngreso = rs.getFloat("transaccionIngreso");
+                float transaccionEgresos = rs.getFloat("transaccionEgresos");
+
+                Transaccion transaccionOBJ = factory.transaccion(id, idPartida, cuenta, trasaccionIngreso, transaccionEgresos);
+
+                TransaccionesSegunEmpresa.add(transaccionOBJ);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return TransaccionesSegunEmpresa;
+    }
+
+    //Lo que hace es que la base de datos retorna las transacciones ordenadas segun el tipo de clasificacion de la cuenta, y de un solo realiza la resta de ingreso menos egreso
+    public float SumatoriaIngresos_SegunClasificacion(String clasificacion) {
+        factory = new Factory();
+        float total = 0;
+        float totalIngresos = 0;
+        float totalEgresos = 0;
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "SELECT transacciones.id, transacciones.idPartida, transacciones.cuenta, transacciones.transaccionIngreso, transacciones.transaccionEgresos\n"
+                    + "FROM transacciones \n"
+                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id\n"
+                    + "WHERE cuentas.clasificacion = '" + clasificacion + "'";
+            st = connect.prepareStatement(SQLQuery);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                float trasaccionIngreso = rs.getFloat("transaccionIngreso");
+                float transaccionEgresos = rs.getFloat("transaccionEgresos");
+
+                totalIngresos = totalIngresos + trasaccionIngreso;
+                totalEgresos = totalEgresos + transaccionEgresos;
+
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        total = totalIngresos - totalEgresos;
+        return total;
+    }
+
     //Retorna un array con las partidas realizadas por una empresa determinada
     public ArrayList<Partida> obtenerPartidas_SegunEmpresa(int empresaID) {
         factory = new Factory();
@@ -690,59 +773,52 @@ public class BaseDatos {
         }
         return listaCuentas;
     }
-    
+
     /*Esta funcion lo que hace es devolver todos los ID de las cuentas que están en la tabla transacciones
      esto es para no agregar campos que no se han utilizado en las transacciones */
-    public ArrayList<String> ObtenerIDCuentaEnTransacciones(int empresaID){
+    public ArrayList<String> ObtenerIDCuentaEnTransacciones(int empresaID) {
         factory = new Factory();
-        
+
         ArrayList<String> Listado = new ArrayList<>();
-        
-        try
-        {
+
+        try {
             connect = DriverManager.getConnection(url);
             String SQL = "SELECT transacciones.cuenta as ID_CUENTA, "
                     + "cuentas.nombre_cuenta as NOMBRE_CUENTA "
                     + "FROM transacciones "
                     + "JOIN cuentas ON transacciones.cuenta = cuentas.id "
                     + "WHERE empresaID = ? ORDER BY cuenta ASC;";
-            
+
             st = connect.prepareStatement(SQL);
             st.setInt(1, empresaID);
-            
+
             rs = st.executeQuery();
-            
-            while(rs.next())
-            {
+
+            while (rs.next()) {
                 Listado.add(String.valueOf(rs.getInt("ID_CUENTA")));
                 Listado.add(rs.getString("NOMBRE_CUENTA"));
             }
-        }
-        catch(SQLException ex)
-        {
-            
-        }
-        finally
-        {
+        } catch (SQLException ex) {
+
+        } finally {
             try {
                 st.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         }
-        
+
         return Listado;
-        
-        
+
     }
-    
+
     /*
     Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los INGRESOS de la cuenta seleccionada, esto es para evitar escribir
     código que haga la misma función.
      */
     public String ObtenerIngresosDeCuenta(int empresaID, int cuentaID) {
         factory = new Factory();
-        String SUM_Ingresos  = "0.0"; 
+        String SUM_Ingresos = "0.0";
         try {
             if (osName.equals("linux")) {
                 System.out.println("Este sistema esta diseñado para correr en Windows");
@@ -772,14 +848,14 @@ public class BaseDatos {
         }
         return SUM_Ingresos;
     }
-    
+
     /*
     Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los EGRESOS de la cuenta seleccionada, esto es para evitar escribir
     código que haga la misma función.
      */
     public String ObtenerEgresosDeCuenta(int empresaID, int cuentaID) {
         factory = new Factory();
-        String SUM_Egresos  = "0.0"; 
+        String SUM_Egresos = "0.0";
         try {
             if (osName.equals("linux")) {
                 System.out.println("Este sistema esta diseñado para correr en Windows");
