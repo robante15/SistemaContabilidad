@@ -8,10 +8,12 @@ package GUI;
 import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import static java.lang.Float.parseFloat;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,6 +27,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
      */
     static Usuario usuario;
     private static Factory factory;
+    String descripcion;
+    String estafecha;
 
     public NuevaEntrada() {
         initComponents();
@@ -54,6 +58,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
         int columnas = 1;
         modeloTabla.setNumRows(columnas);
         modeloTabla.setValueAt(df.format(fecha), 0, 0);
+        estafecha = df.format(fecha);
     }
 
     /**
@@ -89,12 +94,12 @@ public class NuevaEntrada extends javax.swing.JFrame {
         btn_aceptar = new javax.swing.JButton();
         btn_cancelar = new javax.swing.JButton();
         lbl_monto = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        montoTXT = new javax.swing.JTextField();
         rbtn_ingreso = new javax.swing.JRadioButton();
         rbtn_egreso = new javax.swing.JRadioButton();
         btn_añadir = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtA_descripcion = new javax.swing.JTextArea();
+        descripcionTXT = new javax.swing.JTextArea();
         lbl_descripcion = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         btn_agregarCuenta = new javax.swing.JButton();
@@ -251,6 +256,11 @@ public class NuevaEntrada extends javax.swing.JFrame {
         cbox_cuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btn_aceptar.setText("Aceptar");
+        btn_aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_aceptarActionPerformed(evt);
+            }
+        });
 
         btn_cancelar.setText("Cancelar");
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -269,10 +279,15 @@ public class NuevaEntrada extends javax.swing.JFrame {
         rbtn_egreso.setText("Egreso");
 
         btn_añadir.setText("Agregar");
+        btn_añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_añadirActionPerformed(evt);
+            }
+        });
 
-        txtA_descripcion.setColumns(20);
-        txtA_descripcion.setRows(5);
-        jScrollPane2.setViewportView(txtA_descripcion);
+        descripcionTXT.setColumns(20);
+        descripcionTXT.setRows(5);
+        jScrollPane2.setViewportView(descripcionTXT);
 
         lbl_descripcion.setText("Descripción");
 
@@ -306,7 +321,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(cbox_cuentas, 0, 215, Short.MAX_VALUE)
-                                    .addComponent(jTextField1))
+                                    .addComponent(montoTXT))
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_agregarCuenta))
                             .addComponent(btn_añadir))
@@ -337,7 +352,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbl_monto)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(montoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(btn_añadir))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -382,6 +397,8 @@ public class NuevaEntrada extends javax.swing.JFrame {
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
         this.dispose();
+        estafecha = null;
+        descripcion = null;
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void btn_cancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarCuentaActionPerformed
@@ -443,6 +460,74 @@ public class NuevaEntrada extends javax.swing.JFrame {
         this.cargarComboBox();
     }//GEN-LAST:event_focusGained
 
+    private void btn_añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_añadirActionPerformed
+        //para agrega partidas
+        //agregar datos a la tabla
+        
+        String cuenta = (String)cbox_cuentas.getSelectedItem(); //accede al tipo de cuenta
+        float monto = parseFloat(montoTXT.getText()); //el monto a cargar 
+        descripcion = descripcionTXT.getText(); //optiene la descripcion
+        boolean lado; //para saber si va en el debe o en el haber
+        float debe = 0, haber =  0;
+        
+        
+        if(this.rbtn_ingreso.isSelected()){
+            debe = monto;
+        }else{
+            haber = monto;
+        }
+        Object filaNueva[] = {null, cuenta, debe, haber};
+        modeloTabla.addRow(filaNueva);
+        
+        
+    }//GEN-LAST:event_btn_añadirActionPerformed
+
+    private void btn_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_aceptarActionPerformed
+        // TODO add your handling code here:
+        //para validar todo
+        float sumadebe =0;
+        float sumahaber =0;
+        float ingresos = 0, egresos = 0;
+        
+        //suma toda la columna de los ingresos
+        for(int i=1; i<tabla_NuevaEntrada.getRowCount(); i++){
+            float sumatoria =0;
+            sumatoria = parseFloat(tabla_NuevaEntrada.getValueAt(i, 2).toString());
+            sumadebe += sumatoria;
+        }
+        ingresos = sumadebe; //los ingresos totales
+        
+        //suma toda la columna de los egresos
+        for(int i=1; i<tabla_NuevaEntrada.getRowCount(); i++){
+            float sumatoria1 =0;
+            sumatoria1 = parseFloat(tabla_NuevaEntrada.getValueAt(i, 3).toString());
+            sumahaber += sumatoria1;
+        }
+        egresos = sumahaber; //los egresos totales
+        
+        
+        if(ingresos == egresos){
+            JOptionPane.showMessageDialog(this, "Son iguales los ingresos con los egresos");
+            Partida partidaOBJ = factory.partida(WIDTH, factory.baseDatos().idempresa, factory.baseDatos().idusuario
+                    , 3 , estafecha, descripcion, ingresos, egresos);
+            
+            factory.baseDatos().nuevaPartida(partidaOBJ);
+            
+            System.out.print("id = " + partidaOBJ.getId());
+            System.out.print("empresa = " + partidaOBJ.getEmpresaID());
+            System.out.print("usuario = " + partidaOBJ.getUsuarioID());
+            System.out.print("numPartida = " + partidaOBJ.getNumPartida());
+            System.out.print("fecha = " + partidaOBJ.getFecha());
+            System.out.print("descripcion = " + partidaOBJ.getDescripcion());
+            System.out.print("ingresos = " + partidaOBJ.getTotalIngresos());
+            System.out.print("egresos = " + partidaOBJ.getTotalEgresos());
+        }else if(ingresos > egresos){
+            JOptionPane.showMessageDialog(this, "Los ingresos son mayores que los egresos");
+        }else{
+            JOptionPane.showMessageDialog(this, "Los egresos son mayores que los ingresos");
+        }
+    }//GEN-LAST:event_btn_aceptarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -496,6 +581,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JButton btn_cancelarCuenta;
     private javax.swing.JComboBox<String> cbox_clasificacionCuenta;
     private javax.swing.JComboBox<String> cbox_cuentas;
+    private javax.swing.JTextArea descripcionTXT;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -503,7 +589,6 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JFrame jframe_agregarCuenta;
     private javax.swing.JLabel lbl_clasificacion;
     private javax.swing.JLabel lbl_cuenta;
@@ -512,6 +597,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_nombreCuenta;
     private javax.swing.JLabel lbl_tipoSaldo;
     private javax.swing.JLabel lbl_titulo;
+    private javax.swing.JTextField montoTXT;
     private javax.swing.ButtonGroup rbtnG_deudorAcreedor;
     private javax.swing.ButtonGroup rbtnG_ingresoEgreso;
     private javax.swing.JRadioButton rbtn_acreedor;
@@ -519,7 +605,6 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbtn_egreso;
     private javax.swing.JRadioButton rbtn_ingreso;
     private javax.swing.JTable tabla_NuevaEntrada;
-    private javax.swing.JTextArea txtA_descripcion;
     private javax.swing.JTextField txt_nombreCuenta;
     // End of variables declaration//GEN-END:variables
 }

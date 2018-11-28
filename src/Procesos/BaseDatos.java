@@ -40,6 +40,15 @@ public class BaseDatos {
     Connection connect;
     PreparedStatement st = null;
     ResultSet rs = null;
+    
+    
+    //variables para el usuario
+    public static String usu;
+    public static int idusuario;
+    public static int idempresa;
+    
+    //para saber el numero de partida
+    int numeroPartida;
 
     //Verifica la existencia de la carpeta en el cual se creará la base de Datos
     public void verificarDirectorio() {
@@ -74,9 +83,71 @@ public class BaseDatos {
         } catch (SQLException ex) {
             //System.out.print(Conector.class.getName()).log(Level.SEVERE, null, ex);
             System.out.print("Error al cerrar la conexion");
+            usu = null;
+            idusuario = 0;
+            idempresa = 0;
+            numeroPartida = 0;
         }
     }
+    
+    public void numeroPartida() throws SQLException{
+        
+        String SSQL = "SELECT * FROM partidas";
+        connect = DriverManager.getConnection(url);
+        Statement st = connect.createStatement();
+        try {
+            int contador = 0;
+            ResultSet rs = st.executeQuery(SSQL);
+            
+            while(rs.next()){
+                contador += contador;
+            }
+            numeroPartida = contador;
+            
+        } catch (SQLException ex) {
+            System.out.println(ex + "Error de conexión");
+        }
+        
+    }
+    
 
+    //crear una nueva partida en la base de datos
+    public void nuevaPartida(Partida partida){
+        
+        try {
+            if (osName.equals("linux")) {
+                System.out.println("Este sistema esta diseñado para correr en Windows");
+                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
+            } else {
+                connect = DriverManager.getConnection(url);
+            }
+            String SQLQuery = "INSERT INTO partidas (empresaID, usuarioID, numPartida, fecha,"
+                    + "descripcion, totalIngresos, totalEgresos) VALUES (?,?,?,?,?,?,?)";
+            st = connect.prepareStatement(SQLQuery);
+
+            st.setInt(1, partida.getUsuarioID());
+            st.setInt(2, partida.getUsuarioID());
+            st.setInt(3, partida.getNumPartida());
+            st.setString(4, partida.getFecha());
+            st.setString(5, partida.getDescripcion());
+            st.setFloat(6, partida.getTotalIngresos());
+            st.setFloat(7, partida.getTotalEgresos());
+            st.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Nueva partida agregada correctamente");
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        
+    }
+    
+    
     //Crea la base de Datos (Comprobando primero que el directorio exista)
     public void crearBaseDatos() {
         this.verificarDirectorio();
@@ -111,6 +182,9 @@ public class BaseDatos {
 
             if (rs.next()) {
                 aproved = true;
+                usu = rs.getString("usuario");
+                idusuario = rs.getInt("id");
+                idempresa = rs.getInt("empresa");   
             }
 
         } catch (SQLException ex) {
@@ -691,58 +765,13 @@ public class BaseDatos {
         return listaCuentas;
     }
     
-    /*Esta funcion lo que hace es devolver todos los ID de las cuentas que están en la tabla transacciones
-     esto es para no agregar campos que no se han utilizado en las transacciones */
-    public ArrayList<String> ObtenerIDCuentaEnTransacciones(int empresaID){
-        factory = new Factory();
-        
-        ArrayList<String> Listado = new ArrayList<>();
-        
-        try
-        {
-            connect = DriverManager.getConnection(url);
-            String SQL = "SELECT transacciones.cuenta as ID_CUENTA, "
-                    + "cuentas.nombre_cuenta as NOMBRE_CUENTA "
-                    + "FROM transacciones "
-                    + "JOIN cuentas ON transacciones.cuenta = cuentas.id "
-                    + "WHERE empresaID = ? ORDER BY cuenta ASC;";
-            
-            st = connect.prepareStatement(SQL);
-            st.setInt(1, empresaID);
-            
-            rs = st.executeQuery();
-            
-            while(rs.next())
-            {
-                Listado.add(String.valueOf(rs.getInt("ID_CUENTA")));
-                Listado.add(rs.getString("NOMBRE_CUENTA"));
-            }
-        }
-        catch(SQLException ex)
-        {
-            
-        }
-        finally
-        {
-            try {
-                st.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        
-        return Listado;
-        
-        
-    }
-    
     /*
-    Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los INGRESOS de la cuenta seleccionada, esto es para evitar escribir
-    código que haga la misma función.
+    Este metodo lo que hace es devolver un array con el ID DE CUENTA Y NOMBRE de todas las cuentas que hay registradas, esto sirve para mostrarlas en la tabla
+    del LIBRO MAYOR
      */
-    public String ObtenerIngresosDeCuenta(int empresaID, int cuentaID) {
+    public ArrayList<String> listarCuentasLM() {
         factory = new Factory();
-        String SUM_Ingresos  = "0.0"; 
+        ArrayList<String> listaCuentasLM = new ArrayList<String>();
         try {
             if (osName.equals("linux")) {
                 System.out.println("Este sistema esta diseñado para correr en Windows");
@@ -750,15 +779,17 @@ public class BaseDatos {
             } else {
                 connect = DriverManager.getConnection(url);
             }
-            String SQLQuery = "SELECT sum(transaccionIngreso) as Sumatoria from transacciones WHERE empresaID = ? AND cuenta = ?;";
+            String SQLQuery = "SELECT id, nombre_cuenta FROM cuentas ORDER BY nombre_cuenta ASC";
             st = connect.prepareStatement(SQLQuery);
-            st.setInt(1, empresaID);
-            st.setInt(2, cuentaID);
             rs = st.executeQuery();
 
             while (rs.next()) {
 
-                SUM_Ingresos = String.valueOf(rs.getDouble("Sumatoria"));
+                String id_cuenta = String.valueOf(rs.getInt("id"));
+                String nombre_cuenta = rs.getString("nombre_cuenta");
+
+                listaCuentasLM.add(id_cuenta);
+                listaCuentasLM.add(nombre_cuenta);
             }
 
         } catch (SQLException ex) {
@@ -770,44 +801,7 @@ public class BaseDatos {
                 ex.printStackTrace();
             }
         }
-        return SUM_Ingresos;
-    }
-    
-    /*
-    Este metodo lo que hace es hacer una petición a la DB que regrese un string; la sumatoria de los EGRESOS de la cuenta seleccionada, esto es para evitar escribir
-    código que haga la misma función.
-     */
-    public String ObtenerEgresosDeCuenta(int empresaID, int cuentaID) {
-        factory = new Factory();
-        String SUM_Egresos  = "0.0"; 
-        try {
-            if (osName.equals("linux")) {
-                System.out.println("Este sistema esta diseñado para correr en Windows");
-                //connect = DriverManager.getConnection("jdbc:sqlite:" + urlLinux);
-            } else {
-                connect = DriverManager.getConnection(url);
-            }
-            String SQLQuery = "SELECT sum(transaccionEgresos) as Sumatoria from transacciones WHERE empresaID = ? AND cuenta = ?;";
-            st = connect.prepareStatement(SQLQuery);
-            st.setInt(1, empresaID);
-            st.setInt(2, cuentaID);
-            rs = st.executeQuery();
-
-            while (rs.next()) {
-
-                SUM_Egresos = String.valueOf(rs.getDouble("Sumatoria"));
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return SUM_Egresos;
+        return listaCuentasLM;
     }
 
     /*
