@@ -8,6 +8,11 @@ package GUI;
 import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import static java.lang.Float.parseFloat;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -45,6 +50,46 @@ public class NuevaEntrada extends javax.swing.JFrame {
         cargarModeloTabla();
         this.setLocationRelativeTo(null);
         factory = new Factory();
+        
+        /* DECORACIÓN UI */
+        try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+             
+            lbl_cuenta.setFont(sizedFont);
+            lbl_monto.setFont(sizedFont);
+            lbl_descripcion.setFont(sizedFont);
+            tabla_NuevaEntrada.setFont(sizedFont);
+            btn_añadir.setFont(sizedFont);
+            cbox_cuentas.setFont(sizedFont);
+            montoTXT.setFont(sizedFont);
+            descripcionTXT.setFont(sizedFont);
+            rbtn_egreso.setFont(sizedFont);
+            rbtn_ingreso.setFont(sizedFont);
+            
+            
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+        
+        btn_cancelar.setOpaque(false);
+        btn_cancelar.setContentAreaFilled(false);
+        btn_cancelar.setBorderPainted(false);
+        
+        btn_aceptar.setOpaque(false);
+        btn_aceptar.setContentAreaFilled(false);
+        btn_aceptar.setBorderPainted(false);
+        
+        
+        descripcionTXT.setBorder(null);
+        descripcionTXT.setOpaque(false);
+        
+        rbtn_egreso.setOpaque(false);
+        rbtn_ingreso.setOpaque(false);
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -93,24 +138,22 @@ public class NuevaEntrada extends javax.swing.JFrame {
         rbtn_deudor = new javax.swing.JRadioButton();
         rbtn_acreedor = new javax.swing.JRadioButton();
         rbtnG_deudorAcreedor = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabla_NuevaEntrada = new javax.swing.JTable();
-        lbl_cuenta = new javax.swing.JLabel();
-        cbox_cuentas = new javax.swing.JComboBox<>();
-        btn_aceptar = new javax.swing.JButton();
-        btn_cancelar = new javax.swing.JButton();
-        lbl_monto = new javax.swing.JLabel();
         montoTXT = new javax.swing.JTextField();
+        lbl_cuenta = new javax.swing.JLabel();
+        lbl_monto = new javax.swing.JLabel();
+        cbox_cuentas = new javax.swing.JComboBox<>();
+        btn_agregarCuenta = new javax.swing.JButton();
+        btn_añadir = new javax.swing.JButton();
         rbtn_ingreso = new javax.swing.JRadioButton();
         rbtn_egreso = new javax.swing.JRadioButton();
-        btn_añadir = new javax.swing.JButton();
+        lbl_descripcion = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         descripcionTXT = new javax.swing.JTextArea();
-        lbl_descripcion = new javax.swing.JLabel();
-        btn_agregarCuenta = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla_NuevaEntrada = new javax.swing.JTable();
+        btn_aceptar = new javax.swing.JButton();
+        btn_cancelar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         jframe_agregarCuenta.setMinimumSize(new java.awt.Dimension(400, 425));
         jframe_agregarCuenta.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -222,6 +265,10 @@ public class NuevaEntrada extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1500, 1500));
+        setMinimumSize(new java.awt.Dimension(1115, 785));
+        setPreferredSize(new java.awt.Dimension(1115, 785));
+        setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
                 focusGained(evt);
@@ -234,70 +281,25 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 apertura(evt);
             }
         });
+        getContentPane().setLayout(null);
+        getContentPane().add(montoTXT);
+        montoTXT.setBounds(100, 210, 215, 24);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setText("Libro Diario: Nueva entrada");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(24, 24, 24))
-        );
-
-        tabla_NuevaEntrada.setModel(modeloTabla);
-        jScrollPane1.setViewportView(tabla_NuevaEntrada);
-
+        lbl_cuenta.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_cuenta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_cuenta.setText("Cuenta");
+        getContentPane().add(lbl_cuenta);
+        lbl_cuenta.setBounds(20, 150, 70, 30);
+
+        lbl_monto.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_monto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_monto.setText("Monto");
+        getContentPane().add(lbl_monto);
+        lbl_monto.setBounds(10, 210, 80, 30);
 
         cbox_cuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        btn_aceptar.setText("Aceptar");
-        btn_aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_aceptarActionPerformed(evt);
-            }
-        });
-
-        btn_cancelar.setText("Cancelar");
-        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cancelarActionPerformed(evt);
-            }
-        });
-
-        lbl_monto.setText("Monto");
-
-        rbtnG_ingresoEgreso.add(rbtn_ingreso);
-        rbtn_ingreso.setSelected(true);
-        rbtn_ingreso.setText("Ingreso");
-
-        rbtnG_ingresoEgreso.add(rbtn_egreso);
-        rbtn_egreso.setText("Egreso");
-
-        btn_añadir.setText("Agregar");
-        btn_añadir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_añadirActionPerformed(evt);
-            }
-        });
-
-        descripcionTXT.setColumns(20);
-        descripcionTXT.setRows(5);
-        jScrollPane2.setViewportView(descripcionTXT);
-
-        lbl_descripcion.setText("Descripción");
+        getContentPane().add(cbox_cuentas);
+        cbox_cuentas.setBounds(100, 150, 215, 30);
 
         btn_agregarCuenta.setText("+");
         btn_agregarCuenta.addActionListener(new java.awt.event.ActionListener() {
@@ -305,92 +307,72 @@ public class NuevaEntrada extends javax.swing.JFrame {
                 btn_agregarCuentaActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_agregarCuenta);
+        btn_agregarCuenta.setBounds(340, 150, 37, 32);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btn_cancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_aceptar))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lbl_cuenta)
-                                    .addComponent(lbl_monto))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbox_cuentas, 0, 215, Short.MAX_VALUE)
-                                    .addComponent(montoTXT))
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_agregarCuenta))
-                            .addComponent(btn_añadir))
-                        .addGap(18, 18, 18)
-                        .addComponent(rbtn_ingreso)
-                        .addGap(31, 31, 31)
-                        .addComponent(rbtn_egreso)
-                        .addGap(18, 18, 18)
-                        .addComponent(lbl_descripcion)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 94, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbox_cuentas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_cuenta)
-                            .addComponent(btn_agregarCuenta))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_monto)
-                            .addComponent(montoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_añadir))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lbl_descripcion)
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rbtn_ingreso)
-                            .addComponent(rbtn_egreso)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_aceptar)
-                    .addComponent(btn_cancelar))
-                .addContainerGap())
-        );
+        btn_añadir.setText("Agregar");
+        btn_añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_añadirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_añadir);
+        btn_añadir.setBounds(30, 260, 130, 32);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        rbtnG_ingresoEgreso.add(rbtn_ingreso);
+        rbtn_ingreso.setForeground(new java.awt.Color(255, 255, 255));
+        rbtn_ingreso.setSelected(true);
+        rbtn_ingreso.setText("Ingreso");
+        getContentPane().add(rbtn_ingreso);
+        rbtn_ingreso.setBounds(580, 260, 120, 28);
+
+        rbtnG_ingresoEgreso.add(rbtn_egreso);
+        rbtn_egreso.setForeground(new java.awt.Color(255, 255, 255));
+        rbtn_egreso.setText("Egreso");
+        getContentPane().add(rbtn_egreso);
+        rbtn_egreso.setBounds(400, 260, 130, 28);
+
+        lbl_descripcion.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_descripcion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_descripcion.setText("Descripción");
+        getContentPane().add(lbl_descripcion);
+        lbl_descripcion.setBounds(630, 150, 130, 30);
+
+        descripcionTXT.setColumns(20);
+        descripcionTXT.setRows(5);
+        jScrollPane2.setViewportView(descripcionTXT);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(770, 150, 320, 140);
+
+        tabla_NuevaEntrada.setModel(modeloTabla);
+        tabla_NuevaEntrada.setRowHeight(25);
+        jScrollPane1.setViewportView(tabla_NuevaEntrada);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 310, 1060, 299);
+
+        btn_aceptar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_aceptarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_aceptar);
+        btn_aceptar.setBounds(890, 660, 200, 60);
+
+        btn_cancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_cancelar);
+        btn_cancelar.setBounds(660, 660, 200, 60);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/NuevaEntrada.png"))); // NOI18N
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(0, 0, 1130, 750);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -617,9 +599,7 @@ public class NuevaEntrada extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbox_clasificacionCuenta;
     private javax.swing.JComboBox<String> cbox_cuentas;
     private javax.swing.JTextArea descripcionTXT;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

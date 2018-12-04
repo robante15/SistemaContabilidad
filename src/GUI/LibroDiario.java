@@ -9,9 +9,17 @@ import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
 import Procesos.Fechas;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +43,28 @@ public class LibroDiario extends javax.swing.JFrame {
         BaseDatos base = factory.baseDatos();
         String nombre_empresa = base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa();
         this.lbl_empresa.setText(nombre_empresa);
+        
+        /* Decoración UI */
+         try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+            
+            lbl_empresa.setFont(sizedFont);
+            tabla_partidas.setFont(sizedFont);
+            lbl_totalMovimientos.setFont(sizedFont);
+            
+            
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+         
+        btn_cerrar.setOpaque(false);
+        btn_cerrar.setContentAreaFilled(false);
+        btn_cerrar.setBorderPainted(false);
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -44,6 +74,32 @@ public class LibroDiario extends javax.swing.JFrame {
         modeloTabla.addColumn("Partida N°");
         modeloTabla.addColumn("Ingreso");
         modeloTabla.addColumn("Egreso");
+        
+        DefaultTableCellRenderer R = new DefaultTableCellRenderer()
+        {
+            @Override
+            public Component getTableCellRendererComponent(JTable table,
+                            Object value, boolean isSelected, boolean hasFocus,
+                            int row, int column)
+            {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                            row, column);
+                
+                try
+                {
+                    InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Bold.ttf");
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+                    Font sizedFont = font.deriveFont(16f);
+                    setFont(sizedFont);
+                }
+                catch(FontFormatException | IOException ex){    } 
+                return this;
+            }
+ 
+        };
+        
+        //Se cambia la fuente para la primera columna
+        tabla_partidas.getColumnModel().getColumn(0).setCellRenderer(R);
     }
 
     private void cargarModeloTabla() {
@@ -139,98 +195,53 @@ public class LibroDiario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        lbl_libroDiario = new javax.swing.JLabel();
         lbl_empresa = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_partidas = new javax.swing.JTable();
         lbl_totalMovimientos = new javax.swing.JLabel();
+        btn_cerrar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1500, 1500));
+        setMinimumSize(new java.awt.Dimension(1125, 785));
+        setPreferredSize(new java.awt.Dimension(1125, 785));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 apertura(evt);
             }
         });
+        getContentPane().setLayout(null);
 
-        lbl_libroDiario.setText("Libro Diario");
-
+        lbl_empresa.setForeground(new java.awt.Color(255, 255, 255));
         lbl_empresa.setText("Empresa XXX");
-
-        jLabel1.setText("Periodo Contable del XXX al XXX");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(435, 435, 435)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbl_empresa)
-                            .addComponent(lbl_libroDiario)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(394, 394, 394)
-                        .addComponent(jLabel1)))
-                .addContainerGap(511, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_libroDiario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_empresa)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addContainerGap(25, Short.MAX_VALUE))
-        );
+        getContentPane().add(lbl_empresa);
+        lbl_empresa.setBounds(10, 650, 780, 30);
 
         tabla_partidas.setModel(modeloTabla);
+        tabla_partidas.setRowHeight(25);
         jScrollPane1.setViewportView(tabla_partidas);
 
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(20, 150, 1070, 403);
+
+        lbl_totalMovimientos.setForeground(new java.awt.Color(255, 255, 255));
         lbl_totalMovimientos.setText("jLabel2");
+        getContentPane().add(lbl_totalMovimientos);
+        lbl_totalMovimientos.setBounds(10, 680, 800, 30);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lbl_totalMovimientos)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
-                .addComponent(lbl_totalMovimientos)
-                .addContainerGap())
-        );
+        btn_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cerrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_cerrar);
+        btn_cerrar.setBounds(890, 650, 200, 60);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/LibroDiario.png"))); // NOI18N
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(0, 0, 1130, 740);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -239,6 +250,10 @@ public class LibroDiario extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_apertura
+
+    private void btn_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cerrarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_cerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,12 +299,10 @@ public class LibroDiario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton btn_cerrar;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_empresa;
-    private javax.swing.JLabel lbl_libroDiario;
     private javax.swing.JLabel lbl_totalMovimientos;
     private javax.swing.JTable tabla_partidas;
     // End of variables declaration//GEN-END:variables

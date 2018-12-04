@@ -213,7 +213,6 @@ public class Principal extends javax.swing.JFrame {
         bMenu_vista = new javax.swing.JMenu();
         menu_libroDiario = new javax.swing.JMenuItem();
         menu_libroMayor = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         menu_balanceComprobacion = new javax.swing.JMenuItem();
         menu_estadoResultados = new javax.swing.JMenuItem();
         menu_balanceGeneral = new javax.swing.JMenuItem();
@@ -348,10 +347,6 @@ public class Principal extends javax.swing.JFrame {
         });
         bMenu_vista.add(menu_libroMayor);
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setText("Ajuste de IVA");
-        bMenu_vista.add(jMenuItem3);
-
         menu_balanceComprobacion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
         menu_balanceComprobacion.setText("Balance de Comprobación");
         menu_balanceComprobacion.addActionListener(new java.awt.event.ActionListener() {
@@ -464,7 +459,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btn_nuevaPartida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_bienvenida;
     private javax.swing.JLabel lbl_empresa;

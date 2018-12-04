@@ -284,7 +284,7 @@ public class LibroMayor extends javax.swing.JFrame {
                 modeloTabla.setValueAt("$" + Math.abs(SaldoTotal) + " (Nulo)", ContadorAUX, 4);
             }
            
-           IVA_TOTAL = (double) Math.round((CFI_IN - CFI_EG) - (DFI_IN - DFI_EG));
+           IVA_TOTAL = (double) Math.abs(Math.round((CFI_IN - CFI_EG)) - Math.abs(Math.round(DFI_IN - DFI_EG)));
            LB_CFI.setText("$ " + Math.abs(CFI_IN - CFI_EG));
            LB_DFI.setText("$ " + Math.abs(DFI_IN - DFI_EG));
            

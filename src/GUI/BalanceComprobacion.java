@@ -8,6 +8,14 @@ package GUI;
 import Entidades.*;
 import Factory.Factory;
 import Procesos.BaseDatos;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +38,27 @@ public class BalanceComprobacion extends javax.swing.JFrame {
         cargarModeloTabla();
         BaseDatos base = factory.baseDatos();
         this.lbl_empresa.setText(base.obtenerEmpresa_SegunID(usuario.getEmpresa()).getNomre_empresa());
+        
+        /* Decoración UI */
+         try
+        {
+            InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Regular.ttf");
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            Font sizedFont = font.deriveFont(16f);
+            
+            lbl_empresa.setFont(sizedFont);
+            tabla_balanceComprobacion.setFont(sizedFont);
+            
+            
+        }
+        catch (FontFormatException | IOException ex)
+        {
+            
+        }
+         
+        btn_cerrar.setOpaque(false);
+        btn_cerrar.setContentAreaFilled(false);
+        btn_cerrar.setBorderPainted(false);
     }
 
     DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -38,6 +67,34 @@ public class BalanceComprobacion extends javax.swing.JFrame {
         modeloTabla.addColumn("Cuentas");
         modeloTabla.addColumn("Ingreso");
         modeloTabla.addColumn("Egreso");
+        
+        DefaultTableCellRenderer R = new DefaultTableCellRenderer()
+        {
+            @Override
+            public Component getTableCellRendererComponent(JTable table,
+                            Object value, boolean isSelected, boolean hasFocus,
+                            int row, int column)
+            {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                            row, column);
+                
+                try
+                {
+                    InputStream is = Login.class.getResourceAsStream("/Resources/OpenSans-Bold.ttf");
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+                    Font sizedFont = font.deriveFont(16f);
+                    setFont(sizedFont);
+                }
+                catch(FontFormatException | IOException ex){    } 
+                return this;
+            }
+ 
+        };
+        /* Se centra el texto */
+        R.setHorizontalAlignment(JLabel.LEFT);
+        
+        //Se cambia la fuente para la primera columna
+        tabla_balanceComprobacion.getColumnModel().getColumn(0).setCellRenderer(R);
     }
 
     private void cargarModeloTabla() {
@@ -83,88 +140,51 @@ public class BalanceComprobacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        lbl_titulo = new javax.swing.JLabel();
-        lbl_empresa = new javax.swing.JLabel();
-        lbl_periodoContable = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
         table_balanceComprobacion = new javax.swing.JScrollPane();
         tabla_balanceComprobacion = new javax.swing.JTable();
+        lbl_empresa = new javax.swing.JLabel();
+        btn_cerrar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        lbl_titulo.setText("Balance de Comprobación");
-
-        lbl_empresa.setText("Empresa XXXX");
-
-        lbl_periodoContable.setText("Periodo contable del XXX al XXX");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(441, 441, 441)
-                        .addComponent(lbl_titulo))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(472, 472, 472)
-                        .addComponent(lbl_empresa))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(431, 431, 431)
-                        .addComponent(lbl_periodoContable)))
-                .addContainerGap(519, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_titulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_empresa)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_periodoContable)
-                .addContainerGap(25, Short.MAX_VALUE))
-        );
+        setMaximumSize(new java.awt.Dimension(1500, 1500));
+        setMinimumSize(new java.awt.Dimension(1125, 785));
+        setPreferredSize(new java.awt.Dimension(1125, 785));
+        setResizable(false);
+        getContentPane().setLayout(null);
 
         tabla_balanceComprobacion.setModel(modeloTabla);
+        tabla_balanceComprobacion.setRowHeight(25);
         table_balanceComprobacion.setViewportView(tabla_balanceComprobacion);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(table_balanceComprobacion)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addComponent(table_balanceComprobacion, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
-        );
+        getContentPane().add(table_balanceComprobacion);
+        table_balanceComprobacion.setBounds(20, 150, 1060, 450);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        lbl_empresa.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_empresa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_empresa.setText("Empresa XXXX");
+        getContentPane().add(lbl_empresa);
+        lbl_empresa.setBounds(0, 70, 1130, 30);
+
+        btn_cerrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cerrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_cerrar);
+        btn_cerrar.setBounds(890, 660, 200, 60);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/BalanceComprobación.png"))); // NOI18N
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1130, 750);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cerrarActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_btn_cerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,11 +222,9 @@ public class BalanceComprobacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton btn_cerrar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lbl_empresa;
-    private javax.swing.JLabel lbl_periodoContable;
-    private javax.swing.JLabel lbl_titulo;
     private javax.swing.JTable tabla_balanceComprobacion;
     private javax.swing.JScrollPane table_balanceComprobacion;
     // End of variables declaration//GEN-END:variables
